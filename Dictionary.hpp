@@ -2,7 +2,7 @@
 class Dictionary
 {
     private:
-        int M;
+        unsigned int M;
         std::map<std::string, char> words;
         std::map<std::string, char>::iterator it;
     public:
