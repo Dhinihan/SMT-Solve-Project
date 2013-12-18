@@ -1,8 +1,9 @@
 #include <map>
 #include <string>
-#include "Dictionary.hpp"
 #include <fstream>
 #include <iostream>
+
+#include "Dictionary.hpp"
 
 int main()
 {
@@ -15,6 +16,7 @@ int main()
     std::cout << c << " ";
     c = dic.getType("!");
     std::cout << c << "\n";
+    std::cout << "Size is " << dic.size() << "\n";
 }
 
 Dictionary::Dictionary()
@@ -77,4 +79,9 @@ bool Dictionary::hasKey(std::string key)
         return false;
     }
     return true;
+}
+
+unsigned int Dictionary::size()
+{
+    return M;
 }
