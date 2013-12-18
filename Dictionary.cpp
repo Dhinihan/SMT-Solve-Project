@@ -1,24 +1,8 @@
-#include <fstream>
-#include <iostream>
 #include <map>
 #include <string>
-
-class Dictionary
-{
-    private:
-        int M;
-        std::map<std::string, char> words;
-        std::map<std::string, char>::iterator it;
-    public:
-        
-        Dictionary();
-        Dictionary(const char* N, const char* V);
-        
-        bool            add(std::string key, char type);
-        char            getType(std::string key);
-        bool            hasKey(std::string key);
-        unsigned int    size();
-};
+#include "Dictionary.hpp"
+#include <fstream>
+#include <iostream>
 
 int main()
 {
@@ -27,7 +11,7 @@ int main()
     std::cout << c << " ";
     c = dic.getType("be");
     std::cout << c << " ";
-    c = dic.getType("cool");
+    c = dic.getType("woman");
     std::cout << c << " ";
     c = dic.getType("!");
     std::cout << c << "\n";
@@ -94,4 +78,3 @@ bool Dictionary::hasKey(std::string key)
     }
     return true;
 }
-
