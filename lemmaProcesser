@@ -1,0 +1,27 @@
+#!/usr/bin/perl -w
+
+use warnings;
+use strict;
+use v5.10;
+
+my $aux;
+my $line = "";
+
+open(INPUT, "<", $aux = "e_lemma.txt") 
+or die "Impossible to open \"$aux\"";
+
+open(OUT, '>', "lemmas.lst");
+select OUT;
+
+while($line = <INPUT>)
+{
+    if($line !~ m/;/ && $line !~ m/=/)
+    {
+        $line =~ s/([\w'-]+)\s*->//;
+        say $1;
+        while ($line =~ s/([\w'-]+)//)
+        {
+            say '-' . $1;
+        }
+    }
+}
