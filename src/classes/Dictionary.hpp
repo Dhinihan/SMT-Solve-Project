@@ -1,3 +1,14 @@
+#ifndef DICTIONARY_H
+#define DICTIONARY_H
+
+//Standard Libraries
+#include <map>
+#include <string>
+#include <fstream>
+#include <iostream>
+
+class Lemmatizator;
+
 /*  Class Dictionary
  *  
  *  The objects of the Dictionary class are containers that maps
@@ -18,6 +29,10 @@ class Dictionary
         
         /* Attribute it: iterator of the map words. */
         std::map<std::string, char>::iterator it;
+        
+        /* Attribute lTor: intern lemmatizator */
+        Lemmatizator* lTor;
+        
     public:
         
         /*********************CONSTRUCTORS*************************/
@@ -33,6 +48,10 @@ class Dictionary
          */
         Dictionary(const char* N, const char* V);
         
+        /* Standard destructor
+         */
+        ~Dictionary();
+        
         /************************METHODS***************************/
         
         /* Method add: Add a new word and its type into the
@@ -43,7 +62,7 @@ class Dictionary
          * 
          * return: true if succeeded, false otherwise
          */
-        bool            add(std::string key, char type);
+        bool add(std::string key, char type);
 
         /* Method getType: getter for the type of a given word
          *
@@ -51,9 +70,9 @@ class Dictionary
          * 
          * return: the type of the word
          */
-        char            getType(std::string key);
+        char getType(std::string key);
         
-         /* Method hasKey: Check if the word is already in the
+        /* Method hasKey: Check if the word is already in the
          *                dictionary
          *
          * parameter key: the word to check.
@@ -61,7 +80,7 @@ class Dictionary
          * return: true if the word is in the dictionary, false
          *         otherwise.
          */
-        bool            hasKey(std::string key);
+        bool hasKey(std::string key);
         
         /* Method size: Getter for the size of the dictionary.
          *
@@ -70,3 +89,4 @@ class Dictionary
         unsigned int    size();
 };
 
+#endif

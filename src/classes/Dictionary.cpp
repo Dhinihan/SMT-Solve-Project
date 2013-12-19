@@ -1,31 +1,11 @@
-//Standard Libraries
-#include <map>
-#include <string>
-#include <fstream>
-#include <iostream>
-
-//Header file
+//Header files
 #include "Dictionary.hpp"
-
-//Just a test function
-int main()
-{
-    Dictionary dic("Nouns.lst", "Verbs.lst");
-    char c = dic.getType("man");
-    std::cout << c << " ";
-    c = dic.getType("be");
-    std::cout << c << " ";
-    c = dic.getType("woman");
-    std::cout << c << " ";
-    c = dic.getType("!");
-    std::cout << c << "\n";
-    std::cout << "Size is " << dic.size() << "\n";
-}
-
+#include "Lemmatizator.hpp"
 //The Methods are better described in the header file
 
 Dictionary::Dictionary()
 {
+    lTor = new Lemmatizator("lib/lemmas.lst");
     M = 0;
 }
 
@@ -33,6 +13,7 @@ Dictionary::Dictionary(const char* N, const char* V)
 {
     std::ifstream FILEN, FILEV;
     M = 0;
+    lTor = new Lemmatizator("lib/lemmas.lst");
     std::string temp;
     FILEN.open(N, std::ios::in); //File with the nouns
     FILEV.open(V, std::ios::in); //File with the verbs
@@ -60,8 +41,14 @@ Dictionary::Dictionary(const char* N, const char* V)
     }
 }
 
+Dictionary::~Dictionary()
+{
+    delete lTor;
+}
+
 bool Dictionary::add(std::string key, char type)
 {
+    key = lTor->getLemma(key);
     if(!hasKey(key))
     {
         words[key] = type;
@@ -73,6 +60,7 @@ bool Dictionary::add(std::string key, char type)
 
 char Dictionary::getType(std::string key)
 {
+    key = lTor->getLemma(key);
     if(hasKey(key))
         return words[key];
     return 'D';
@@ -80,6 +68,7 @@ char Dictionary::getType(std::string key)
 
 bool Dictionary::hasKey(std::string key)
 {
+    key = lTor->getLemma(key);
     it = words.find(key);
     if(it == words.end())
     {
