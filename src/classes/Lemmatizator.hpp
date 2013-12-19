@@ -1,3 +1,12 @@
+#ifndef LEMMATIZATOR_H
+#define LEMMATIZATOR_H  
+
+//Standard Libraries
+#include <map>
+#include <string>
+#include <fstream>
+#include <iostream>
+
 /*  Class Lemmatizator
  *  
  *  The objects of the class Lemmatizator are containers that maps 
@@ -49,3 +58,4 @@ class Lemmatizator
         std::string getLemma(std::string key);
 };
 
+#endif

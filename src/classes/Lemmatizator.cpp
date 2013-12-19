@@ -1,21 +1,11 @@
-//Standard Libraries
-#include <map>
-#include <string>
-#include <fstream>
-#include <iostream>
-
 //Header File
 #include "Lemmatizator.hpp"
 
-//Just a test function
-main()
-{
-    Lemmatizator lem("lemmas.lst");
-    std::cout << lem.getLemma("are") << "\n";
-    return 0;
-}
-
 //The Methods are better described in the header file
+
+Lemmatizator::Lemmatizator()
+{
+}
 
 Lemmatizator::Lemmatizator(const char* file)
 {
