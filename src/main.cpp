@@ -8,26 +8,22 @@
 int main()
 {
     std::string input;
+    /* Loading the dictionary*/
     Dictionary* dic = new Dictionary("lib/Nouns.lst", "lib/Verbs.lst");
     
     while(std::cin >> input)
     {
-        bool end = false;
-        
+        /* Removing commas */
         if(input.back() == ',')
             input = input.substr(0, input.size() - 1);
         
+        /* Removing punctuation */
         if (input.back() == '.' 
         ||  input.back() == '!' 
-        ||  input.back() == '?')
-        {
-            end = true;
-            input = input.substr(0, input.size() - 1);
-        }
-        
+        ||  input.back() == '?') input = input.substr(0, input.size() - 1);
+       
+        /*Printing the symbols (V,D,N)*/
         std::cout << dic->getType(input) << " ";
-        
-        if(end) std::cout << "\n";
     }
 
     delete dic;
