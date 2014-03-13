@@ -2,3 +2,5 @@ dic
 lem
 bin/
 dist/
+output.cvc
+tests/
