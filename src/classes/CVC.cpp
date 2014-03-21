@@ -86,13 +86,13 @@ void CVC::createFile(const char* input, const char* fileName)
         {
             case 'v':
             case 'V':
-                file << "ASSERT v[" << size++ << "];\n"; break;
+                file << "ASSERT v(" << size++ << ");\n"; break;
             case 'n':
             case 'N':
-                file << "ASSERT n[" << size++ << "];\n"; break;
+                file << "ASSERT n(" << size++ << ");\n"; break;
             case 'd':
             case 'D':
-                file << "ASSERT d[" << size++ << "];\n"; break;
+                file << "ASSERT d(" << size++ << ");\n"; break;
         }
     }
     
@@ -102,25 +102,25 @@ void CVC::createFile(const char* input, const char* fileName)
     
     for(int i = 0; i < size*size -1; i++)
     {
-        file << "dist_vn[(" << i/size << ", " << i%size << ")] + ";
+        file << "dist_vn(" << i/size << ", " << i%size << ") + ";
     }
-    file << "dist_vn[(" << size - 1 << ", " << size - 1  << ")];\n";
+    file << "dist_vn(" << size - 1 << ", " << size - 1  << ");\n";
     
     file << "\nASSERT dND = ";
     
     for(int i = 0; i < size*size -1; i++)
     {
-        file << "dist_nd[(" << i/size << ", " << i%size << ")] + ";
+        file << "dist_nd(" << i/size << ", " << i%size << ") + ";
     }
-    file << "dist_nd[(" << size - 1 << ", " << size - 1  << ")];\n";
+    file << "dist_nd(" << size - 1 << ", " << size - 1  << ");\n";
     
     file << "\nASSERT dDV = ";
     
     for(int i = 0; i < size*size -1; i++)
     {
-        file << "dist_dv[(" << i/size << ", " << i%size << ")] + ";
+        file << "dist_dv(" << i/size << ", " << i%size << ") + ";
     }
-    file << "dist_dv[(" << size - 1 << ", " << size - 1  << ")];\n";
+    file << "dist_dv(" << size - 1 << ", " << size - 1  << ");\n";
     
     //Finishing the file. 
     file << "CHECKSAT;\n";

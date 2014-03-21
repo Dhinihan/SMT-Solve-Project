@@ -23,7 +23,7 @@ class CVC
         
         /* Method createFile: create an input for cvc4.
          *
-         * parameter input   : A text file with the types of words
+         * parameter input   : A text file with the types of words  
          * parameter fileName: the name of the file to be created
          */
         static void createFile(const char* input, const char* fileName);   

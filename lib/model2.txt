@@ -1,31 +1,31 @@
 dVN, dND, dDV: REAL;
-v, n, d: ARRAY INT OF BOOLEAN;
-dist_vn, dist_nd, dist_dv : ARRAY [INT,INT] OF REAL;
+v, n, d: INT -> BOOLEAN;
+dist_vn, dist_nd, dist_dv : (INT,INT) -> REAL;
 
 % Filling the distance matrices with zeros %
 ASSERT FORALL (i, j: INT) : 
 
-    (NOT (v[i] AND n[j]) => dist_vn[(i,j)] = 0)
+    (NOT (v(i) AND n(j)) => dist_vn(i,j) = 0)
 AND 
-    (NOT (n[i] AND d[j]) => dist_nd[(i,j)] = 0)
+    (NOT (n(i) AND d(j)) => dist_nd(i,j) = 0)
 AND
-    (NOT (d[i] AND v[j] ) => dist_dv[(i,j)] = 0);
+    (NOT (d(i) AND v(j)) => dist_dv(i,j) = 0);
     
 % Defining the distance function %
 ASSERT FORALL (i, j: INT) :
 
-    (v[i] AND n[j] => dist_vn[(i,j)] = 1/((i-j)*(i-j)))
+    (v(i) AND n(j) => dist_vn(i,j) = 1/((i-j)*(i-j)))
 AND
-    (n[i] AND d[j] => dist_nd[(i,j)] = 1/((i-j)*(i-j)))
+    (n(i) AND d(j) => dist_nd(i,j) = 1/((i-j)*(i-j)))
 AND
-    (d[i] AND v[j] => dist_dv[(i,j)] = 1/((i-j)*(i-j)));
+    (d(i) AND v(j) => dist_dv(i,j) = 1/((i-j)*(i-j)));
 
 % Ensuring the disjunction % 
 ASSERT FORALL (i: INT) : 
-    (v[i] => (NOT n[i] AND NOT d[i]))
+    (v(i) => (NOT n(i) AND NOT d(i)))
 AND
-    (n[i] => (NOT d[i] AND NOT v[i]))
+    (n(i) => (NOT d(i) AND NOT v(i)))
 AND
-    (d[i] => (NOT v[i] AND NOT n[i]));
+    (d(i) => (NOT v(i) AND NOT n(i)));
     
 
