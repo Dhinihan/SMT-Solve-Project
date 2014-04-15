@@ -40,8 +40,16 @@ int main(int argc, char* argv[])
     if(argc == 3 && argv[2][1] == 'v')
         v = true;
     
+    std::vector<double> V;
+    std::vector<double>& rV = V;
+    
+    V.push_back(0.27);
+    rV.push_back(0.34);
+    
+    std::cout << rV[1] << "\n";
+    
     //Static method that creates the CVC input file.
-    answer = Solver::find_x(buffer, v);
+    Solver::find_x(rV, 3, 5);
     
     return 1;
 }
