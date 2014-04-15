@@ -4,21 +4,20 @@ use warnings;
 use strict;
 use v5.10;
 
-die "I need parameters!" if @ARGV < 2;
+die "I need parameters!" if @ARGV < 1;
 
 my $n = $ARGV[0];
-my $w = $ARGV[1];
 
-say "N = $n\nW = $w";
+say "N = $n";
 
-open(OUTPUT, ">", "tests/input2.txt")
+open(OUTPUT, ">", "tests/input.txt")
 or die "Impossible to create the file";
 
-print OUTPUT "$n $w ";
+print OUTPUT "$n ";
 
-for(my $i = 0; $i < $n*$w; $i++)
+for(my $i = 0; $i < $n; $i++)
 {
-    my $rand    = rand(200) - 100;
+    my $rand    = int(rand(200) - 150);
     print OUTPUT "$rand ";
 }
 

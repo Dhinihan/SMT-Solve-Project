@@ -15,7 +15,7 @@ class Matrix
         
         /* Attribute N: number of coefficients on each equation. */
         /* Attribute W: number of equations. */
-        int N, W;
+        int N;
         
         /* Attribute M: Vector with the coefficients. */
         std::vector<double> *M;
@@ -54,19 +54,13 @@ class Matrix
          *
          * return: the element in the given position
          */
-        double get(int i, int j);
+        double get(int i);
         
         /* Method getRowSize
          * 
          * return: The number of equations
          */
-        int getRowSize();
-        
-        /* Method getColumnSize
-         * 
-         * return: The number of coefficients on each equation
-         */
-        int getColumnSize();
+        int getSize();
         
 };
 

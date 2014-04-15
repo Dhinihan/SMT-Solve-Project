@@ -2,7 +2,7 @@
 #include <iostream> 
 
 //Header File
-#include "Matrix.hpp"
+#include "../include/Matrix.hpp"
 
 Matrix::Matrix(std::string input)
 {
@@ -13,29 +13,19 @@ Matrix::Matrix(std::string input)
     {
         std::cout << "The N value is invalid\n";
     }
-    W = nextNumberInt(&input);;
-    if (W < 1 )
-    {
-        std::cout << "The W value is invalid\n";
-    }
         
-    for(int i = 0; i < N*W; i++)
+    for(int i = 0; i < N; i++)
     {
         M->push_back(nextNumberDouble(&input));
     }
 }
 
-double Matrix::get(int i, int j)
+double Matrix::get(int i)
 {
-    return M->at(i*N + j);
+    return M->at(i);
 }
 
-int Matrix::getRowSize()
-{
-    return W;
-}
-
-int Matrix::getColumnSize()
+int Matrix::getSize()
 {
     return N;
 }

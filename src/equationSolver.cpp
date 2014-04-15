@@ -4,13 +4,13 @@
 #include <fstream>
 
 //Header Files
-#include "classes/CVC.hpp"
+#include "../include/Solver.hpp"
 
 int main(int argc, char* argv[])
 {   
-    if (argc < 3)
+    if (argc < 2)
     {
-        std::cout << "Error 1: " << argc;
+        std::cout << "I need a input file " << argc;
         return -1;
     }
     
@@ -19,12 +19,13 @@ int main(int argc, char* argv[])
     
     if(!input.is_open())
     {
-        std::cout << "Error 2 " << argv[1] << "\n";
+        std::cout << "Error while trying to open " << argv[1] << "\n";
         return -1;
     }
     
     std::string buffer;
     std::string line;
+    std::string answer;
     
     //Reading the input
     while(std::getline(input, line))
@@ -35,8 +36,12 @@ int main(int argc, char* argv[])
     
     input.close();
     
+    bool v = false;
+    if(argc == 3 && argv[2][1] == 'v')
+        v = true;
+    
     //Static method that creates the CVC input file.
-    CVC::createFile(buffer.c_str(), argv[2]);
+    answer = Solver::find_x(buffer, v);
     
     return 1;
 }
