@@ -16,9 +16,10 @@ class Matrix
         /* Attribute N: number of coefficients on each equation. */
         /* Attribute W: number of equations. */
         int N;
+        int W;
         
         /* Attribute M: Vector with the coefficients. */
-        std::vector<double> *M;
+        std::vector<double> M;
         
         /************************METHODS***************************/
         
@@ -47,20 +48,13 @@ class Matrix
         
         /************************METHODS***************************/
         
-        /* Method get: get a double from the Matrix.
-         *
-         * parameter i: the row of the number
-         * parameter j: the column of the number
-         *
-         * return: the element in the given position
-         */
-        double get(int i);
         
-        /* Method getRowSize
-         * 
-         * return: The number of equations
-         */
+        double get(int i, int j);
         int getSize();
+        
+        int getN();
+        int getW();
+        std::vector<double>& getVector();
         
 };
 

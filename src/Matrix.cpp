@@ -6,30 +6,49 @@
 
 Matrix::Matrix(std::string input)
 {
-    M = new std::vector<double>;
+    N = nextNumberInt(&input);
+    W = nextNumberInt(&input);
     
-    N = nextNumberInt(&input);;
     if (N < 1 )
     {
         std::cout << "The N value is invalid\n";
     }
-        
-    for(int i = 0; i < N; i++)
+    
+    if (W < 1 )
     {
-        M->push_back(nextNumberDouble(&input));
+        std::cout << "The W value is invalid\n";
+    }
+        
+    for(int i = 0; i < N*W+1; i++)
+    {
+        M.push_back(nextNumberDouble(&input));
     }
 }
 
-double Matrix::get(int i)
+double Matrix::get(int i, int j)
 {
-    return M->at(i);
+    return M.at(i*N + j);
 }
 
 int Matrix::getSize()
 {
+    return M.size();
+}
+
+int Matrix::getN()
+{
     return N;
 }
 
+int Matrix::getW()
+{
+    return W;
+}
+
+std::vector<double>& Matrix::getVector()
+{
+    return M;
+}
 
 int Matrix::nextNumberInt(std::string* input)
 {
