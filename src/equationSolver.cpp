@@ -5,6 +5,7 @@
 
 //Header Files
 #include "../include/Solver.hpp"
+#include "../include/Matrix.hpp"
 
 int main(int argc, char* argv[])
 {   
@@ -40,16 +41,14 @@ int main(int argc, char* argv[])
     if(argc == 3 && argv[2][1] == 'v')
         v = true;
     
-    std::vector<double> V;
-    std::vector<double>& rV = V;
+    Matrix coef(buffer);
     
-    V.push_back(0.27);
-    rV.push_back(0.34);
-    
-    std::cout << rV[1] << "\n";
-    
+    std::vector<double>& rV = coef.getVector();
+    int n = coef.getN();
+    int w = coef.getW();
     //Static method that creates the CVC input file.
-    Solver::find_x(rV, 3, 5);
+    
+    Solver::find_x(rV, n, w, v);
     
     return 1;
 }
