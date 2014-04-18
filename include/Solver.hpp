@@ -33,8 +33,7 @@ class Solver
          *
          * parameter buffer: string with the coefficients.
          */
-        static void find_x(std::vector<double>& coef, int n, int w, bool v=false);
-           
+        static std::vector<int>& find_x(std::vector<double>& coef, int n, int w, bool v=false);
 };
 
 #endif

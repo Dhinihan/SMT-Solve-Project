@@ -11,10 +11,13 @@
 using namespace CVC4;
 using namespace std;
 
-void Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
+vector<int>& Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
 {
     ExprManager em;
     SmtEngine smt(&em);
+    
+    vector<int> result;
+    vector<int>& rresult = result;
     
     smt.setOption("incremental", SExpr("true"));
     smt.setOption("produce-models", SExpr("true"));
@@ -42,8 +45,7 @@ void Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
         cExample.printResult(cout);
     }
     cout << "\n\n";
-    smt.pop();
-
+    
     if(v)
     {
         cout << "The inequation:" << "\n";
@@ -55,6 +57,14 @@ void Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
         cout << "Only one of the variables must be equal to 1:" << "\n";
         cout << only_one    << "\n\n";
     }
+    
+    for(int i = 0; i < X.size(); i++)
+        result.push_back(atoi(smt.getValue(X[i]).toString().c_str()));
+
+    smt.pop();
+    
+    return rresult;
+    
 }
 
 vector<Expr> Solver::Xvector(int n, int w, ExprManager* em)
