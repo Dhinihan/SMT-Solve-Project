@@ -48,7 +48,36 @@ int main(int argc, char* argv[])
     int w = coef.getW();
     //Static method that creates the CVC input file.
     
-    Solver::find_x(rV, n, w, v);
+    std::cout << "INEQUATION:\n\n";
+    
+    std::cout << rV[0] << "\n\n";
+    
+    for(int i = 0; i < w; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            std::cout << " + x[" << i+1 << "," << j+1 << "]*("<< rV[i*n + j + 1] << ")";
+        }
+        std::cout << "\n\n";
+    }
+    
+    std::cout << "<= 0\n\n";
+    
+    std::vector<int> sol = Solver::find_x(rV, n, w, v);
+    
+    std::cout << "SOLUTION:\n\n"; 
+    
+    if(sol[0] != -1)
+        for(int i = 0; i < w; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                std::cout << "x[" << i+1 << "," << j+1 << "] = "<< sol[i*n + j] << " ";
+            }
+            std::cout << "\n\n";
+        }
+    else
+        std::cout <<"There are no solutions.";
     
     return 1;
 }
