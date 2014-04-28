@@ -11,13 +11,12 @@
 using namespace CVC4;
 using namespace std;
 
-vector<int>& Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
+vector<int> Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
 {
     ExprManager em;
     SmtEngine smt(&em);
     
     vector<int> result;
-    vector<int>& rresult = result;
     
     smt.setOption("incremental", SExpr("true"));
     smt.setOption("produce-models", SExpr("true"));
@@ -37,17 +36,19 @@ vector<int>& Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
     
     smt.push();
     string isSat = smt.checkSat(inequation).toString();
-    cout << "\nThe inequation is "<< isSat;
-    if(isSat.compare("unsat"))
-    {
-        cout << " and a solution is:" << "\n";
-        cExample.invoke(&smt);
-        cExample.printResult(cout);
-    }
-    cout << "\n\n";
+    bool sat = isSat.compare("unsat");
     
     if(v)
     {
+        cout << "\nThe inequation is "<< isSat;
+        if(sat)
+        {
+            cout << " and a solution is:" << "\n";
+            cExample.invoke(&smt);
+            cExample.printResult(cout);
+        }
+        cout << "\n\n";
+        
         cout << "The inequation:" << "\n";
         cout << inequation  << "\n\n";
         cout << "The Domain for the variables:" << "\n";
@@ -58,12 +59,15 @@ vector<int>& Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
         cout << only_one    << "\n\n";
     }
     
-    for(int i = 0; i < X.size(); i++)
-        result.push_back(atoi(smt.getValue(X[i]).toString().c_str()));
-
-    smt.pop();
+    if(sat)
+        for(int i = 0; i < X.size(); i++)
+            result.push_back(atoi(smt.getValue(X[i]).toString().c_str()));
+    else
+        result.push_back(-1);
     
-    return rresult;
+    smt.pop();    
+    
+    return result;
     
 }
 
