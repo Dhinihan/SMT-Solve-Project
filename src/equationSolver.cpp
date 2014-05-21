@@ -46,7 +46,6 @@ int main(int argc, char* argv[])
     std::vector<double>& rV = coef.getVector();
     int n = coef.getN();
     int w = coef.getW();
-    //Static method that creates the CVC input file.
     
     std::cout << "INEQUATION:\n\n";
     
@@ -63,7 +62,7 @@ int main(int argc, char* argv[])
     
     std::cout << "<= 0\n\n";
     
-    std::vector<int> sol = Solver::find_x(rV, n, w, v);
+    std::vector<int> sol = Solver::find_x(rV, n, w);
     
     std::cout << "SOLUTION:\n\n"; 
     
