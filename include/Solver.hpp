@@ -3,7 +3,10 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
+#include <iostream>
 #include <cvc4/cvc4.h>
+
 
 /*  Class CVC
  *  
