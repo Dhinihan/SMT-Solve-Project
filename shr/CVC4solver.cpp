@@ -1,9 +1,10 @@
-#include "../include/Solver.hpp"
+#include "../include/CVC4solver.hpp"
 
 using namespace CVC4;
 using namespace std;
 
-vector<int> Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
+
+vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w, bool v)
 {
     ExprManager em;
     SmtEngine smt(&em);
@@ -14,16 +15,16 @@ vector<int> Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
     smt.setOption("produce-models", SExpr("true"));
     GetModelCommand cExample = GetModelCommand();
     
-    vector<Expr> A = Solver::Avector(coef, &em);
+    vector<Expr> A = CVC4Solver::Avector(coef, &em);
     
-    vector<Expr> X = Solver::Xvector(n, w, &em);
+    vector<Expr> X = CVC4Solver::Xvector(n, w, &em);
     
-    Expr X_EQ_1_OR_0 = Solver::XDomain   (X, &em); 
-    Expr almost_one  = Solver::almostOne (X, n, w, &em);
-    Expr only_one    = Solver::onlyOne   (X, n, w, &em);
-    Expr inequation  = Solver::inequation(X, A, &em);
+    Expr X_EQ_1_OR_0 = CVC4Solver::XDomain   (X, &em); 
+    Expr at_least_one  = CVC4Solver::atLeastOne (X, n, w, &em);
+    Expr only_one    = CVC4Solver::onlyOne   (X, n, w, &em);
+    Expr inequation  = CVC4Solver::inequation(X, A, &em);
     
-    Expr assumptions = em.mkExpr(Kind::AND, X_EQ_1_OR_0, almost_one, only_one);
+    Expr assumptions = em.mkExpr(Kind::AND, X_EQ_1_OR_0, at_least_one, only_one);
     smt.assertFormula(assumptions);
     
     smt.push();
@@ -45,25 +46,31 @@ vector<int> Solver::find_x(std::vector<double>& coef, int n, int w, bool v)
         cout << inequation  << "\n\n";
         cout << "The Domain for the variables:" << "\n";
         cout << X_EQ_1_OR_0 << "\n\n";
-        cout << "Almost one of the variables must be equal to 1:" << "\n";
-        cout << almost_one  << "\n\n";
+        cout << "At least one of the variables must be equal to 1:" << "\n";
+        cout << at_least_one  << "\n\n";
         cout << "Only one of the variables must be equal to 1:" << "\n";
         cout << only_one    << "\n\n";
     }
     
     if(sat)
+    {
+        result.push_back(1);
         for(int i = 0; i < X.size(); i++)
             result.push_back(atoi(smt.getValue(X[i]).toString().c_str()));
+    }
     else
-        result.push_back(-1);
-    
+    {
+        result.push_back(0);
+        for(int i = 0; i < X.size(); i++)
+            result.push_back(0);
+    }
     smt.pop();    
     
     return result;
     
 }
 
-vector<Expr> Solver::Xvector(int n, int w, ExprManager* em)
+vector<Expr> CVC4Solver::Xvector(int n, int w, ExprManager* em)
 {
     vector<Expr> X;
     
@@ -74,7 +81,7 @@ vector<Expr> Solver::Xvector(int n, int w, ExprManager* em)
     return X;
 }
 
-vector<Expr> Solver::Avector(vector<double>& coef, ExprManager* em)
+vector<Expr> CVC4Solver::Avector(vector<double>& coef, ExprManager* em)
 {
     vector<Expr> A;
     
@@ -87,7 +94,7 @@ vector<Expr> Solver::Avector(vector<double>& coef, ExprManager* em)
     return A;
 }
 
-Expr Solver::XDomain(vector<Expr>& X, ExprManager* em)
+Expr CVC4Solver::XDomain(vector<Expr>& X, ExprManager* em)
 {
     vector<Expr> X_domain;
     
@@ -108,7 +115,7 @@ Expr Solver::XDomain(vector<Expr>& X, ExprManager* em)
     return em->mkExpr(Kind::AND, X_domain);
 }
 
-Expr Solver::almostOne(vector<Expr>& X, int n, int w, ExprManager* em)
+Expr CVC4Solver::atLeastOne(vector<Expr>& X, int n, int w, ExprManager* em)
 {
     Expr one  = em->mkConst(Rational(1));
     vector<Expr> X_EQ_One;
@@ -131,7 +138,7 @@ Expr Solver::almostOne(vector<Expr>& X, int n, int w, ExprManager* em)
 
 }
 
-Expr Solver::onlyOne(vector<Expr>& X, int n, int w, ExprManager* em)
+Expr CVC4Solver::onlyOne(vector<Expr>& X, int n, int w, ExprManager* em)
 {
     Expr only_one;
     Expr one = em->mkConst(Rational(1));
@@ -153,7 +160,7 @@ Expr Solver::onlyOne(vector<Expr>& X, int n, int w, ExprManager* em)
     return em->mkExpr(Kind::AND, X_AND);
 }
 
-Expr Solver::inequation(vector<Expr>& X, vector<Expr>& A, ExprManager* em)
+Expr CVC4Solver::inequation(vector<Expr>& X, vector<Expr>& A, ExprManager* em)
 {
     
     Expr x_MUL_a;

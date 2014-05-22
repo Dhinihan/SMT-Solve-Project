@@ -4,7 +4,7 @@
 #include <fstream>
 
 //Header Files
-#include "../include/Solver.hpp"
+#include "../include/CVC4solver.hpp"
 #include "../include/Matrix.hpp"
 
 int main(int argc, char* argv[])
@@ -60,23 +60,23 @@ int main(int argc, char* argv[])
         std::cout << "\n\n";
     }
     
-    std::cout << "<= 0\n\n";
+    std::cout << ">= 0\n\n";
     
-    std::vector<int> sol = Solver::find_x(rV, n, w);
+    std::vector<int> sol = CVC4Solver::solveInequation(rV, n, w);
     
     std::cout << "SOLUTION:\n\n"; 
     
-    if(sol[0] != -1)
+    if(sol[0] != 0)
         for(int i = 0; i < w; i++)
         {
-            for(int j = 0; j < n; j++)
+            for(int j = 1; j <= n; j++)
             {
-                std::cout << "x[" << i+1 << "," << j+1 << "] = "<< sol[i*n + j] << " ";
+                std::cout << "x[" << i+1 << "," << j << "] = "<< sol[i*n + j] << " ";
             }
             std::cout << "\n\n";
         }
     else
-        std::cout <<"There are no solutions.";
+        std::cout <<"There are no solutions.\n";
     
     return 1;
 }
