@@ -2,9 +2,9 @@
 #include <iostream> 
 
 //Header File
-#include "../include/Matrix.hpp"
+#include "../include/Parse.hpp"
 
-Matrix::Matrix(std::string input)
+Parse::Parse(std::string input)
 {
     N = nextNumberInt(&input);
     W = nextNumberInt(&input);
@@ -25,32 +25,27 @@ Matrix::Matrix(std::string input)
     }
 }
 
-double Matrix::get(int i, int j)
+double Parse::get(int i, int j)
 {
     return M.at(i*N + j);
 }
 
-int Matrix::getSize()
-{
-    return M.size();
-}
-
-int Matrix::getN()
+int Parse::getN()
 {
     return N;
 }
 
-int Matrix::getW()
+int Parse::getW()
 {
     return W;
 }
 
-std::vector<double>& Matrix::getVector()
+std::vector<double>& Parse::getVector()
 {
     return M;
 }
 
-int Matrix::nextNumberInt(std::string* input)
+int Parse::nextNumberInt(std::string* input)
 {
     int answer = atoi(input->c_str());
 
@@ -62,7 +57,7 @@ int Matrix::nextNumberInt(std::string* input)
     return answer;
 }
 
-double Matrix::nextNumberDouble(std::string* input)
+double Parse::nextNumberDouble(std::string* input)
 {
     double answer = atof(input->c_str());
 

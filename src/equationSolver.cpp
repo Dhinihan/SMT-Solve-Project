@@ -5,7 +5,7 @@
 
 //Header Files
 #include "../include/CVC4solver.hpp"
-#include "../include/Matrix.hpp"
+#include "../include/Parse.hpp"
 
 int main(int argc, char* argv[])
 {   
@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
     if(argc == 3 && argv[2][1] == 'v')
         v = true;
     
-    Matrix coef(buffer);
+    Parse coef(buffer);
     
     std::vector<double>& rV = coef.getVector();
     int n = coef.getN();
