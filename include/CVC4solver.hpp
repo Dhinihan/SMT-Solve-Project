@@ -98,7 +98,7 @@ class CVC4Solver
          * \param coef the vector with the coefficients.
          * \param n  the size of the words.
          * \param w  the number of words.
-         * \param v  if is true, prints all the process.
+         * \param v  if is true, it prints the process.
          * \return   a vector with one solution if possible.
          */
         static std::vector<int> solveInequation(std::vector<double>& coef, int n, int w, bool v=false);
