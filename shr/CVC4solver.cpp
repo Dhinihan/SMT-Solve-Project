@@ -56,7 +56,7 @@ vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w,
     {
         result.push_back(1);
         for(int i = 0; i < X.size(); i++)
-            result.push_back(atoi(smt.getValue(X[i]).toString().c_str()));
+            result.push_back(atoi(smt.getValue(X[i]).toString().substr(16).c_str()));
     }
     else
     {
@@ -66,6 +66,7 @@ vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w,
     }
     smt.pop();    
     
+
     return result;
     
 }

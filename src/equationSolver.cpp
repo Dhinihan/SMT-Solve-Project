@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
     std::vector<int> sol = CVC4Solver::solveInequation(rV, n, w);
     
     std::cout << "SOLUTION:\n\n"; 
-    
+
     if(sol[0] != 0)
         for(int i = 0; i < w; i++)
         {
@@ -77,6 +77,6 @@ int main(int argc, char* argv[])
         }
     else
         std::cout <<"There are no solutions.\n";
-    
+        
     return 1;
 }
