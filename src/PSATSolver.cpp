@@ -52,11 +52,11 @@ void PSATsolver::solve(int n,
     {
         
         vector<double> coeffs = matToVector(c.t()*B.i());
-           
+        
+        cout << "passou\n";   
         if(v)
             cout << z << "\n";
         
-        cout << "passou\n";
         vector<int> sol = CVC4Solver::solve(coeffs, 
                                             extra, 
                                             clauses,
