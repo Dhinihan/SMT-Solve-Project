@@ -1,4 +1,4 @@
-    BIN := prog
+BIN := prog
 
 CFLAGS   :=
 CXXFLAGS := -std=c++11 -Wno-deprecated
@@ -36,7 +36,7 @@ all: $(BINDIR)/$(BIN)
 
 $(BINDIR)/$(BIN): $(OBJ) $(LIO) $(LIB) | $(BINDIR)
 	$(CXX) $(OBJ) -o $@ $(LDFLAGS) $(LDLIBS) $(RPATH)
-	
+
 $(OBJ): | $(OBJDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
