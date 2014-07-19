@@ -2,7 +2,7 @@
 
 CFLAGS   :=
 CXXFLAGS := -std=c++11 -Wno-deprecated
-LDFLAGS  := -lCVC4solver -lcvc4 -lgmp
+LDFLAGS  := -lCVC4solver -lcvc4 -lgmp -larmadillo
 
 SRCDIR := src
 OBJDIR := obj
