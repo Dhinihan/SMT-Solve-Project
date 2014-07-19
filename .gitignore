@@ -8,3 +8,4 @@ tmp/
 obj/
 lib/
 doc/
+*.pdf
