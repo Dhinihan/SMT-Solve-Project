@@ -65,9 +65,10 @@ vector<int> CVC4Solver::solve(vector<double>& coef,
             {
                 result.push_back(
                 atoi(
-                smt.getValue(X[i]).toString().substr(16).c_str()
-                )
+                    smt.getValue(X[i]).toString().substr(0).c_str()
+                )   
                 );
+                cout << smt.getValue(X[i]).toString() << "\n";
             }
         }
     }
