@@ -3,7 +3,6 @@ lem
 bin/
 dist/
 output.cvc
-tests/
 tmp/
 obj/
 lib/
