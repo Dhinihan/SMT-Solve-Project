@@ -169,4 +169,6 @@ void PSATsolver::pivoting(mat& B,
     }
 
     pi = B.i()*p;
+    
+    cout << "passou\n";
 }
