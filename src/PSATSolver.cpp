@@ -48,20 +48,20 @@ void PSATsolver::solve(int n,
     
     int count = 0;
     double min = 1;
+    
     while(z(0,0) > 0.00000001)
     {
         
         vector<double> coeffs = matToVector(c.t()*B.i());
         
-        cout << "passou\n";   
         if(v)
             cout << z << "\n";
-        
+        cout << "passou\n";    
         vector<int> sol = CVC4Solver::solve(coeffs, 
                                             extra, 
                                             clauses,
                                             n-1);
-        
+        cout << "passou\n";    
         if(sol[0] == 0)
         {
             cout << "Unsat" << "\n";
