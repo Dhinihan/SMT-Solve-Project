@@ -1,10 +1,16 @@
 #include "../include/CVC4solver.hpp"
 
+#include <math.h>
+
 using namespace CVC4;
 using namespace std;
 
 
-vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w, bool v)
+vector<int> CVC4Solver::solve(vector<double>& coef,
+                              vector<int>& free,
+                              vector<vector<int>>& clauses,
+                              int n,
+                              bool v)
 {
     ExprManager em;
     SmtEngine smt(&em);
@@ -15,17 +21,17 @@ vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w,
     smt.setOption("produce-models", SExpr("true"));
     GetModelCommand cExample = GetModelCommand();
     
-    vector<Expr> A = CVC4Solver::Avector(coef, &em);
+    vector<Expr> A = Avector(coef, &em);
     
-    vector<Expr> X = CVC4Solver::Xvector(n, w, &em);
+    vector<Expr> X = Xvector(n, free, &em);
     
-    Expr X_EQ_1_OR_0 = CVC4Solver::XDomain   (X, &em); 
-    Expr at_least_one  = CVC4Solver::atLeastOne (X, n, w, &em);
-    Expr only_one    = CVC4Solver::onlyOne   (X, n, w, &em);
-    Expr inequation  = CVC4Solver::inequation(X, A, &em);
+    Expr X_EQ_1_OR_0 = XDomain(X, &em); 
     
-    Expr assumptions = em.mkExpr(Kind::AND, X_EQ_1_OR_0, at_least_one, only_one);
-    smt.assertFormula(assumptions);
+    Expr restrictions = makeClauses(X, clauses, &em); 
+    
+    Expr inequation  = CVC4Solver::inequation(X, A, free, &em);
+    
+    smt.assertFormula(em.mkExpr(Kind::AND, X_EQ_1_OR_0, restrictions));
     
     smt.push();
     string isSat = smt.checkSat(inequation).toString();
@@ -46,17 +52,24 @@ vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w,
         cout << inequation  << "\n\n";
         cout << "The Domain for the variables:" << "\n";
         cout << X_EQ_1_OR_0 << "\n\n";
-        cout << "At least one of the variables must be equal to 1:" << "\n";
-        cout << at_least_one  << "\n\n";
-        cout << "Only one of the variables must be equal to 1:" << "\n";
-        cout << only_one    << "\n\n";
     }
     
     if(sat)
     {
         result.push_back(1);
-        for(int i = 0; i < X.size(); i++)
-            result.push_back(atoi(smt.getValue(X[i]).toString().substr(16).c_str()));
+        for(int i = 0, j = 0; i < X.size(); i++)
+        {
+            if(free.size() > 0 && i == free[j])
+                j++;
+            else
+            {
+                result.push_back(
+                atoi(
+                smt.getValue(X[i]).toString().substr(16).c_str()
+                )
+                );
+            }
+        }
     }
     else
     {
@@ -65,19 +78,20 @@ vector<int> CVC4Solver::solveInequation(std::vector<double>& coef, int n, int w,
             result.push_back(0);
     }
     smt.pop();    
-    
 
     return result;
     
 }
 
-vector<Expr> CVC4Solver::Xvector(int n, int w, ExprManager* em)
+vector<Expr> CVC4Solver::Xvector(int n, 
+                                 vector<int>& free, 
+                                 ExprManager* em)
 {
     vector<Expr> X;
     
-    for(int i = 0; i < w; i++)
-        for(int j = 0; j < n; j++)
-            X.push_back(em->mkVar("x" + to_string(i+1) + to_string(j+1), em->integerType()));
+    for(int i = 0; i < n + free.size(); i++)
+        X.push_back(em->mkVar("x" + to_string(i+1), 
+                              em->integerType()));
     
     return X;
 }
@@ -88,8 +102,8 @@ vector<Expr> CVC4Solver::Avector(vector<double>& coef, ExprManager* em)
     
     for(int i = 0; i < coef.size(); i++)
     {
-        int temp = coef[i]*1000000;
-        A.push_back(em->mkConst(Rational(temp,1000000)));
+        int temp = 100000;
+        A.push_back(em->mkConst(Rational(ceil(temp*coef[i]), temp)));
     }
     
     return A;
@@ -104,81 +118,83 @@ Expr CVC4Solver::XDomain(vector<Expr>& X, ExprManager* em)
     
     Expr Xi_EQ_one;
     Expr Xi_EQ_zero;
-    Expr tmp;
     
     for(int i = 0; i < X.size(); i++)
     {
         Xi_EQ_one  = em->mkExpr(Kind::EQUAL, X[i], one );
         Xi_EQ_zero = em->mkExpr(Kind::EQUAL, X[i], zero);
-        X_domain.push_back(em->mkExpr(Kind::OR, Xi_EQ_one, Xi_EQ_zero));
+        X_domain.push_back(em->mkExpr(Kind::OR, 
+                                      Xi_EQ_one, 
+                                      Xi_EQ_zero));
     }
     
     return em->mkExpr(Kind::AND, X_domain);
 }
 
-Expr CVC4Solver::atLeastOne(vector<Expr>& X, int n, int w, ExprManager* em)
+Expr CVC4Solver::makeClauses(vector<Expr>&        X,
+                             vector<vector<int>>& clauses,
+                             ExprManager*         em)
 {
+    vector<Expr> temp;
+    vector<Expr> assertions;
+    Expr         expression;
+    
     Expr one  = em->mkConst(Rational(1));
-    vector<Expr> X_EQ_One;
-    vector<Expr> X_AND;
-    vector<Expr> X_OR;
+    Expr zero = em->mkConst(Rational(0));
     
-    for(int i = 0; i < X.size(); i++)
-        X_EQ_One.push_back(em->mkExpr(Kind::EQUAL, X[i], one));
-    
-    for(int i = 0; i < w; i++)
+    for(int i = 0; i < clauses.size(); i++)
     {
-        for(int j = 0; j < n ; j++)
-            X_OR.push_back(X_EQ_One[i*n+j]);
-            
-        X_AND.push_back(em->mkExpr(Kind::OR, X_OR));
-        X_OR.clear();
+        for(int j = 0; j < clauses[i].size(); j++)
+        {
+            if(clauses[i][j] < 0)
+            {
+                int index = -clauses[i][j];
+                expression = em->mkExpr(Kind::EQUAL, X[index-1], zero);
+            }
+            else
+            {
+                int index  = clauses[i][j];
+                expression = em->mkExpr(Kind::EQUAL, X[index-1], one);
+            }
+            temp.push_back(expression);
+        }
+        if(temp.size() > 1)
+            assertions.push_back(em->mkExpr(Kind::OR, temp));
+        else
+            assertions.push_back(temp[0]);
+        temp.clear();
     }
     
-    return em->mkExpr(Kind::AND, X_AND);
+    return em->mkExpr(Kind::AND, assertions);
+}                  
 
-}
-
-Expr CVC4Solver::onlyOne(vector<Expr>& X, int n, int w, ExprManager* em)
+Expr CVC4Solver::inequation(vector<Expr>& X, 
+                            vector<Expr>& A,
+                            vector<int>& free,
+                            ExprManager* em)
 {
-    Expr only_one;
-    Expr one = em->mkConst(Rational(1));
-    vector<Expr> X_NEQ_one;
-    vector<Expr> X_AND;
-    
-    for(int i = 0; i < X.size(); i++)
-        X_NEQ_one.push_back(em->mkExpr(Kind::DISTINCT, X[i], one));
-        
-    for(int i = 0; i < w; i++)
-    {
-        for(int j = i*n; j < i*n + n-1; j++)
-            for (int k = j+1; k < i*n + n; k++)
-                X_AND.push_back(em->mkExpr(Kind::OR, 
-                                           X_NEQ_one[j], 
-                                           X_NEQ_one[k]));
-    }
-    
-    return em->mkExpr(Kind::AND, X_AND);
-}
-
-Expr CVC4Solver::inequation(vector<Expr>& X, vector<Expr>& A, ExprManager* em)
-{
+    Rational error((int) A.size(), delta);
     
     Expr x_MUL_a;
-    Expr zero = em->mkConst(Rational(0));
+    Expr zero = em->mkConst(error);
     Expr inequation;
     
     vector<Expr> Xi_MUL_Ai;
     
     Xi_MUL_Ai.push_back(A[0]);
     
-    for(int i = 0; i < X.size(); i++)
+    for(int i = 0, j = 0; i < X.size(); i++)
     {
-        x_MUL_a = em->mkExpr(Kind::MULT, X[i], A[i+1]);
-        Xi_MUL_Ai.push_back(x_MUL_a);
+        if(free.size() > 0 && i == free[j])
+            j++;
+        else
+        {
+            x_MUL_a = em->mkExpr(Kind::MULT, X[i], A[i+1-j]);
+            Xi_MUL_Ai.push_back(x_MUL_a);
+        }
     }
     
     inequation = em->mkExpr(Kind::PLUS, Xi_MUL_Ai);
     
-    return em->mkExpr(Kind::GEQ, inequation, zero);
+    return em->mkExpr(Kind::GT, inequation, zero);
 }
