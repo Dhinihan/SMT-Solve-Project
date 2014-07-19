@@ -56,6 +56,7 @@ void PSATsolver::solve(int n,
         if(v)
             cout << z << "\n";
         
+        cout << "passou\n";
         vector<int> sol = CVC4Solver::solve(coeffs, 
                                             extra, 
                                             clauses,
@@ -169,6 +170,4 @@ void PSATsolver::pivoting(mat& B,
     }
 
     pi = B.i()*p;
-    
-    cout << "passou\n";
 }
