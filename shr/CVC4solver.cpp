@@ -63,12 +63,11 @@ vector<int> CVC4Solver::solve(vector<double>& coef,
                 j++;
             else
             {
-                result.push_back(
-                atoi(
-                    smt.getValue(X[i]).toString().substr(0).c_str()
-                )   
-                );
-                cout << smt.getValue(X[i]).toString() << "\n";
+                string temp = smt.getValue(X[i]).toString();
+                if(trmp.substr(0).c_str() == '(')
+                    result.push_back(atoi(temp.substr(16).c_str()));
+                else
+                    result.push_back(atoi(temp.substr(0).c_str()));
             }
         }
     }
