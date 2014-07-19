@@ -64,7 +64,7 @@ vector<int> CVC4Solver::solve(vector<double>& coef,
             else
             {
                 string temp = smt.getValue(X[i]).toString();
-                if(trmp.substr(0).c_str() == '(')
+                if(temp.at(0) == '(')
                     result.push_back(atoi(temp.substr(16).c_str()));
                 else
                     result.push_back(atoi(temp.substr(0).c_str()));
