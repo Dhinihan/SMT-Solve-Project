@@ -56,12 +56,10 @@ void PSATsolver::solve(int n,
         
         if(v)
             cout << z << "\n";
-        cout << "passou\n";    
         vector<int> sol = CVC4Solver::solve(coeffs, 
                                             extra, 
                                             clauses,
                                             n-1);
-        cout << "passou\n";    
         if(sol[0] == 0)
         {
             cout << "Unsat" << "\n";
