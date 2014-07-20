@@ -8,3 +8,5 @@ obj/
 lib/
 doc/
 *.pdf
+test/
+tests/
