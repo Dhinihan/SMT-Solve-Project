@@ -63,10 +63,16 @@ class PSATsolver
                              mat Aj, 
                              mat p, 
                              bool v = true);
+                             
+        static int** makeMatrix(int n);
         
     public:
         
-        static void solve(char* inputPath, bool v = true);
+        static int solve(int**& m, 
+                         vector<double>& prob, 
+                         double* time,
+                         char* inputPath, 
+                         bool v);
         
         //! 
         /*! The inequation is in the form of A0 + A[i,j]*X[i,j] >= 0.
@@ -74,10 +80,11 @@ class PSATsolver
          * \param 
          * \return
          */
-        static void solve(int n, 
-                          vector<double> prob, 
-                          vector<vector<int>> clauses,
-                          bool v = true);
+        static int solve(int**& m, 
+                         vector<double>& prob,
+                         double* time,
+                         vector<vector<int>> clauses,
+                         bool v = true);
 };
 
 #endif
