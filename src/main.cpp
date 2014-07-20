@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "../include/PSATsolver.hpp"
 
 using namespace std;
@@ -18,7 +16,15 @@ int main(int argc, char** argv)
     if (argc == 3 && argv[2][1] == 'v' && argv[2][0] == '-')
         v = true;
     
-    PSATsolver::solve(argv[1], v);
+    int** m;
+    int**& M = m;
+    vector<double> pi;
+    double time;
+    int n;
+    
+    n = PSATsolver::solve(M, pi, &time, argv[1], v);
+
+    cout << time << "\n\n";
     
     return 1;
 }
