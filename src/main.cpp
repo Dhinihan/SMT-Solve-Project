@@ -22,7 +22,7 @@ int main(int argc, char** argv)
     double time;
     int n;
     
-    for(int i = 0; i < argc; i++)
+    for(int i = 1; i < argc; i++)
     {
         n = PSATsolver::solve(M, pi, &time, argv[i], v);
         cout << time << "\n";
