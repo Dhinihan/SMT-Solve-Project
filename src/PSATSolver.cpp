@@ -34,8 +34,14 @@ int PSATsolver::solve(int**& m,
     struct tms tmsstart, tmsend;
     clock_t    start, end;
     
+    static long clktck = 0;
+    
+    if ((clktck = sysconf(_SC_CLK_TCK)) < 0)
+            cout << "sysconf error" << endl;
+
     if ((start = times(&tmsstart)) == -1)
         cout << "times error" << endl;
+
         
     vector<double> cleaned;
     vector<int> extra;
@@ -85,7 +91,13 @@ int PSATsolver::solve(int**& m,
             cout << "Unsat" << "\n";
             if(v)
                 cout << count << " iterações\n";
-            return 0;
+            if ((end = times(&tmsend)) == -1)
+                cout << "times error" << endl;
+        
+            *time = ((tmsend.tms_utime - tmsstart.tms_utime) / 
+                    (double) clktck);   
+
+            return n;
         }
         
         mat teste = (c.t()*B.i())*vectorToMat(sol);
@@ -124,11 +136,6 @@ int PSATsolver::solve(int**& m,
     if ((end = times(&tmsend)) == -1)
         cout << "times error" << endl;
         
-    static long clktck = 0;
-    
-    if ((clktck = sysconf(_SC_CLK_TCK)) < 0)
-            cout << "sysconf error" << endl;
-    
     *time = ((tmsend.tms_utime - tmsstart.tms_utime) / 
            (double) clktck);   
        
