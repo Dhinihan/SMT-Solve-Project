@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <sys/times.h>
 
 #include "../include/PSATsolver.hpp"
 #include "../include/CVC4solver.hpp"
@@ -8,17 +9,34 @@
 using namespace std;
 using namespace arma;
 
-void PSATsolver::solve(char* inputPath, bool v)
+int PSATsolver::solve(int**& m, 
+                      vector<double>& prob, 
+                      double* time,
+                      char* inputPath, 
+                      bool v)
 {
     Parser problem(inputPath);
-    solve(problem.getN(), problem.getProbs(), problem.getClauses(), v);
+    prob = problem.getProbs();
+    
+    return solve(m, 
+                 prob,
+                 time, 
+                 problem.getClauses(), 
+                 v);
 }
 
-void PSATsolver::solve(int n, 
-                       vector<double> prob, 
-                       vector<vector<int>> clauses,
-                       bool v)
+int PSATsolver::solve(int**& m, 
+                      vector<double>& prob,
+                      double* time,
+                      vector<vector<int>> clauses,
+                      bool v)
 {
+    struct tms tmsstart, tmsend;
+    clock_t    start, end;
+    
+    if ((start = times(&tmsstart)) == -1)
+        cout << "times error" << endl;
+        
     vector<double> cleaned;
     vector<int> extra;
     
@@ -29,6 +47,8 @@ void PSATsolver::solve(int n,
             extra.push_back(i);
         else
             cleaned.push_back(prob[i]);
+    
+    int n = cleaned.size();
     
     mat c = ones<mat>(n,1);
     mat B = eye<mat>(n,n);
@@ -65,7 +85,7 @@ void PSATsolver::solve(int n,
             cout << "Unsat" << "\n";
             if(v)
                 cout << count << " iterações\n";
-            return;
+            return 0;
         }
         
         mat teste = (c.t()*B.i())*vectorToMat(sol);
@@ -90,10 +110,29 @@ void PSATsolver::solve(int n,
         cout << "tem que ser 1: " << onlyones.t()*pi << "\n";
         cout << "tem que ser p:\n" << B*pi << "\n";
         cout << count << " iterações\n";
+        cout << "B:\n" << B << "\n";
+        cout << "pi:\n" << pi << "\n";
     }
     
-    cout << "B:\n" << B << "\n";
-    cout << "pi:\n" << pi << "\n";
+    int** matrix = makeMatrix(n);
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < n; j++)
+            matrix[i][j] = B(i,j);
+    
+    m = matrix;
+    
+    if ((end = times(&tmsend)) == -1)
+        cout << "times error" << endl;
+        
+    static long clktck = 0;
+    
+    if ((clktck = sysconf(_SC_CLK_TCK)) < 0)
+            cout << "sysconf error" << endl;
+    
+    *time = ((tmsend.tms_utime - tmsstart.tms_utime) / 
+           (double) clktck);   
+       
+    return n;        
 }
 
 vector<double> PSATsolver::matToVector(mat A)
@@ -129,6 +168,15 @@ mat PSATsolver::vectorToMat(vector<double>& v)
         A(i,0) = v[i];
     }
     return A;
+}
+
+int** PSATsolver::makeMatrix(int n)
+{
+    int** matrix = (int**) malloc((sizeof (int*)) * n);
+    for(int i = 0; i < n; i ++)
+        matrix[i] = (int*) malloc((sizeof (int)) * n);
+        
+    return matrix;
 }
 
 void PSATsolver::pivoting(mat& B, 
