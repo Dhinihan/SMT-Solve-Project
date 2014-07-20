@@ -47,7 +47,7 @@ int main(int argc, char** argv)
     for(int i = 1; i < argc; i++)
     {
         n = PSATsolver::solve(M, pi, &time, argv[i], v);
-        cout << time << "\n";
+        cout << argv[i] << ": " << time << "\n";
     }
     
     
