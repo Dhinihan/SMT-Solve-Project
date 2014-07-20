@@ -13,8 +13,8 @@ int main(int argc, char** argv)
         return -1;
     }
     
-    if (argc == 3 && argv[2][1] == 'v' && argv[2][0] == '-')
-        v = true;
+    //if (argc == 3 && argv[2][1] == 'v' && argv[2][0] == '-')
+      //  v = true;
     
     int** m;
     int**& M = m;
@@ -22,9 +22,12 @@ int main(int argc, char** argv)
     double time;
     int n;
     
-    n = PSATsolver::solve(M, pi, &time, argv[1], v);
-
-    cout << time << "\n\n";
+    for(int i = 0; i < argc; i++)
+    {
+        n = PSATsolver::solve(M, pi, &time, argv[i], v);
+        cout << time << "\n";
+    }
+    
     
     return 1;
 }
