@@ -8,7 +8,7 @@ using namespace arma;
 
 int main(int argc, char** argv)
 {
-    bool v = false;
+    bool v = true;
     
     if (argc < 2)
     {
