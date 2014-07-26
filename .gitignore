@@ -9,3 +9,4 @@ lib/
 doc/
 *.pdf
 tests/
+conf.sh
