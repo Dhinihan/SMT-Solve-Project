@@ -102,7 +102,7 @@ vector<Expr> CVC4Solver::Avector(vector<double>& coef, ExprManager* em)
     
     for(int i = 0; i < coef.size(); i++)
     {
-        int temp = 100000;
+        int temp = delta;
         A.push_back(em->mkConst(Rational(ceil(temp*coef[i]), temp)));
     }
     
