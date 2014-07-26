@@ -195,7 +195,7 @@ void PSATsolver::pivoting(mat& B,
 {
     double min = 2;
     int minIndex = -1;
-    
+
     mat Xj = B.i()*Aj;
     
     for(int i = 0; i < Xj.n_rows; i++)
@@ -208,6 +208,7 @@ void PSATsolver::pivoting(mat& B,
     }
     
     cout << Xj(minIndex,0) << "\n";
+    cin.ignore();
     
     B.insert_cols(minIndex, Aj);
     B.shed_col(minIndex+1);
