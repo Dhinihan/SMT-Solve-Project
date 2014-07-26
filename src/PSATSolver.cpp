@@ -200,7 +200,9 @@ void PSATsolver::pivoting(mat& B,
     
     for(int i = 0; i < Xj.n_rows; i++)
     {
-        if(Xj(i,0) > 0.000001 && pi(i,0)/Xj(i,0) < min)
+        if (pi(i,0) < 0.000001)
+            pi(i,0) = 0;
+	if(Xj(i,0) > 0.000001 && pi(i,0)/Xj(i,0) < min)
         {
             min = pi(i,0)/Xj(i,0);
             minIndex = i;
