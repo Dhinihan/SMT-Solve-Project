@@ -25,7 +25,7 @@ class CVC4Solver
          */
         CVC4Solver();
         
-        static const int delta = 100000;
+        static const int delta = 1000;
         
         //! Creates the variables.
         /*!
