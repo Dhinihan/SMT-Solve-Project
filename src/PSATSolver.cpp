@@ -42,6 +42,7 @@ int PSATsolver::solve(int**& m,
     if ((start = times(&tmsstart)) == -1)
         cout << "times error" << endl;
 
+    double delta = CVC4Solver::getDelta();
         
     vector<double> cleaned;
     vector<int> extra;
@@ -75,13 +76,13 @@ int PSATsolver::solve(int**& m,
     int count = 0;
     double min = 1;
     
-    while(z(0,0) > 0.00000001)
+    while(z(0,0) > delta)
     {
-        
         vector<double> coeffs = matToVector(c.t()*B.i());
         
         if(v)
             cout << z << "\n";
+            
         vector<int> sol = CVC4Solver::solve(coeffs, 
                                             extra, 
                                             clauses,
@@ -144,15 +145,17 @@ int PSATsolver::solve(int**& m,
 
 vector<double> PSATsolver::matToVector(mat A)
 {
+    double iDelta = 1/CVC4Solver::getDelta();
     vector<double> v;
     for(int i = 0; i < A.n_cols; i++)
     {
+        
         int temp;
         if(A(0,i) >= 0)
-            temp = A(0,i)*100000;
+            temp = A(0,i)*iDelta;
         else
-            temp = ceil(A(0,i)*100000);
-        v.push_back(temp/10000000.0);
+            temp = ceil(A(0,i)*iDelta);
+        v.push_back(temp/iDelta);
     }
     return v;
 }
@@ -193,6 +196,7 @@ void PSATsolver::pivoting(mat& B,
                           mat p, 
                           bool v)
 {
+    double delta = CVC4Solver::getDelta();
     double min = 2;
     int minIndex = -1;
 
@@ -200,9 +204,9 @@ void PSATsolver::pivoting(mat& B,
     
     for(int i = 0; i < Xj.n_rows; i++)
     {
-        if (pi(i,0) < 0.000001)
+        if (pi(i,0) < delta)
             pi(i,0) = 0;
-	if(Xj(i,0) > 0.000001 && pi(i,0)/Xj(i,0) < min)
+	if(Xj(i,0) > delta && pi(i,0)/Xj(i,0) < min)
         {
             min = pi(i,0)/Xj(i,0);
             minIndex = i;

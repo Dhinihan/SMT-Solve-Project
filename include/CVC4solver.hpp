@@ -25,8 +25,6 @@ class CVC4Solver
          */
         CVC4Solver();
         
-        static const int delta = 100000;
-        
         //! Creates the variables.
         /*!
          * \param n  the size of the words.
@@ -101,6 +99,9 @@ class CVC4Solver
                                  vector<vector<int>>& clauses,
                                  int n,
                                  bool v = false);
+        double static getDelta(){return 1.0/delta;};
+                                 
+        static const int delta = 100000;
 };
 
 #endif
