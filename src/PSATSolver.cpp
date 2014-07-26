@@ -205,8 +205,9 @@ void PSATsolver::pivoting(mat& B,
             min = pi(i,0)/Xj(i,0);
             minIndex = i;
         }
-        
     }
+    
+    cout << Xj(minIndex,0) << "\n";
     
     B.insert_cols(minIndex, Aj);
     B.shed_col(minIndex+1);
