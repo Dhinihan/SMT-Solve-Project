@@ -79,10 +79,11 @@ void test(int N, int k, int n, double step, int begin, int end, string prefix)
                  +  "_"  + to_string(j)
                  +  ".pcnf";
             PSATsolver::solve(M, pi, &time, (char*) file.c_str(), false);
+            cout << j << " " << time << "\n";
             y += time/N;
         }
         output << i << " " << y << "\n";
-        cout << y << "\n";
+        cout <<"media: "<< y << "\n";
     }
     output.close();   
 }
