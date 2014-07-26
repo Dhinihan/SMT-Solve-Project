@@ -173,7 +173,7 @@ Expr CVC4Solver::inequation(vector<Expr>& X,
                             vector<int>& free,
                             ExprManager* em)
 {
-    Rational error((int) A.size() + 10, delta);
+    Rational error((int) A.size() + 100, delta);
     
     Expr x_MUL_a;
     Expr zero = em->mkConst(error);
