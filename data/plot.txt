@@ -1,0 +1,4 @@
+set output "data_p.ps"
+set terminal postscript portrait
+set size 1,.5
+plot[0:10] "data/data.txt" using 1:2 with lines
