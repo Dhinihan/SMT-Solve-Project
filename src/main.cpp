@@ -64,7 +64,6 @@ void test(int N, int k, int n, double step, int begin, int end, string prefix)
     vector<double> pi;
     ofstream output;
     output.open("./data/data.txt");
-       
     for(double i = begin; i <= end; i+=step)
     {
         double y = 0;
@@ -78,6 +77,7 @@ void test(int N, int k, int n, double step, int begin, int end, string prefix)
                  +  "_M" + to_string(m)
                  +  "_"  + to_string(j)
                  +  ".pcnf";
+            cout << "opening: " << file << "\n";
             PSATsolver::solve(M, pi, &time, (char*) file.c_str(), false);
             cout << j << " " << time << "\n";
             y += time/N;
