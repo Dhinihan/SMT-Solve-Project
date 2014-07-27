@@ -96,7 +96,10 @@ int PSATsolver::solve(int**& m,
             }
             if ((end = times(&tmsend)) == -1)
                 cout << "times error" << endl;
-        
+            
+            prob.clear();
+            prob.push_back(0);
+            
             *time = ((tmsend.tms_utime - tmsstart.tms_utime) / 
                     (double) clktck);   
 
@@ -133,6 +136,12 @@ int PSATsolver::solve(int**& m,
     for(int i = 0; i < n; i++)
         for(int j = 0; j < n; j++)
             matrix[i][j] = B(i,j);
+    
+    prob.clear();
+    prob.push_back(1);
+    
+    for(int i = 0; i < pi.size(); i++)
+        prob.push_back(pi(i,0));
     
     m = matrix;
     

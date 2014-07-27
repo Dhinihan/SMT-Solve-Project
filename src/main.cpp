@@ -44,6 +44,7 @@ int main(int argc, char** argv)
              atoi(argv[6]),
              atoi(argv[7]),
              argv[8]);
+        return 1;
     }
     
     int** matrix;
