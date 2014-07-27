@@ -22,7 +22,7 @@ int main(int argc, char** argv)
         return -1;
     }
     
-    if((string) argv[1] == "--test")
+    if((string) argv[1] == "--maketest")
     {
         TestGenerator t(atoi(argv[2]));
         t.createAll(atoi(argv[3]),
@@ -34,16 +34,9 @@ int main(int argc, char** argv)
                     argv[9]);
         return 1;
     }
-
-    if (argc < 2)
+    
+    if((string) argv[1] == "--test")
     {
-        std::cout << "I need a input file " << "\n";
-        return -1;
-    }
-    
-    //if (argc == 3 && argv[2][1] == 'v' && argv[2][0] == '-')
-      //  v = true;
-    
         test(atoi(argv[1]),
              atoi(argv[2]),
              atoi(argv[3]),
@@ -51,13 +44,20 @@ int main(int argc, char** argv)
              atoi(argv[5]),
              atoi(argv[6]),
              argv[7]);
+    }
     
+    int** matrix;
+    int**& M = matrix;    
+    vector<double> pi;
+    double time;
     
-    
+    PSATsolver::solve(M, pi, &time, argv[1], true);
+        
     return 1;
 }
 
-void test(int N, int k, int n, double step, int begin, int end, string prefix)
+void test(int N,     int k,   int n,         double step, 
+          int begin, int end, string prefix)
 {
     int** matrix;
     int**& M = matrix;
@@ -78,7 +78,12 @@ void test(int N, int k, int n, double step, int begin, int end, string prefix)
                  +  "_"  + to_string(j)
                  +  ".pcnf";
             cout << "opening: " << file << "\n";
-            PSATsolver::solve(M, pi, &time, (char*) file.c_str(), false);
+            
+            
+            PSATsolver::solve(M, pi, &time, 
+                             (char*) file.c_str(), false);
+                             
+            
             cout << j << " " << time << "\n";
             y += time/N;
         }
