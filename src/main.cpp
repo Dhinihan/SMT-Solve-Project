@@ -37,13 +37,13 @@ int main(int argc, char** argv)
     
     if((string) argv[1] == "--test")
     {
-        test(atoi(argv[1]),
-             atoi(argv[2]),
+        test(atoi(argv[2]),
              atoi(argv[3]),
-             atof(argv[4]),
-             atoi(argv[5]),
+             atoi(argv[4]),
+             atof(argv[5]),
              atoi(argv[6]),
-             argv[7]);
+             atoi(argv[7]),
+             argv[8]);
     }
     
     int** matrix;
@@ -62,9 +62,10 @@ void test(int N,     int k,   int n,         double step,
     int** matrix;
     int**& M = matrix;
     vector<double> pi;
-    ofstream output;
-    output.open("./data/time.txt");
-    output.open("./data/sat.txt");
+    ofstream outtime;
+    ofstream outsat;
+    outtime.open("./data/time.txt");
+    outsat.open("./data/sat.txt");
     for(double i = begin; i <= end; i+=step)
     {
         double y = 0;
@@ -87,7 +88,7 @@ void test(int N,     int k,   int n,         double step,
                              
             if (pi[0] == 1)
             {
-                sat += 1/n;
+                sat += 1.0/N;
                 cout << "sat, time: ";
             }
             else cout << "unsat, time: ";
@@ -95,8 +96,11 @@ void test(int N,     int k,   int n,         double step,
             cout << time << "\n";
             y += time/N;
         }
-        output << i << " " << y << "\n";
-        cout <<"media: "<< y << "\n";
+        outtime << i << " " << y << "\n";
+        outsat << i << " " << sat << "\n";
+        cout <<"media tempo: "<< y << "\n";
+        cout <<"media sat: " << sat << "\n";
     }
-    output.close();   
+    outtime.close();
+    outsat.close();
 }
