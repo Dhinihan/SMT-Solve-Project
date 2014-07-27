@@ -216,7 +216,7 @@ void PSATsolver::pivoting(mat& B,
     for(int i = 0; i < Xj.n_rows; i++)
     {
         if (pi(i,0) < delta)
-            pi(i,0) = 0;
+            pi(i,0) = delta;
 	if(Xj(i,0) > delta && pi(i,0)/Xj(i,0) < min)
         {
             min = pi(i,0)/Xj(i,0);
