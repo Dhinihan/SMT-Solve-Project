@@ -63,10 +63,12 @@ void test(int N,     int k,   int n,         double step,
     int**& M = matrix;
     vector<double> pi;
     ofstream output;
-    output.open("./data/data.txt");
+    output.open("./data/time.txt");
+    output.open("./data/sat.txt");
     for(double i = begin; i <= end; i+=step)
     {
         double y = 0;
+        double sat = 0;
         for(int j = 0; j < N; j++)
         {
             double time = 0;
@@ -77,14 +79,20 @@ void test(int N,     int k,   int n,         double step,
                  +  "_M" + to_string(m)
                  +  "_"  + to_string(j)
                  +  ".pcnf";
-            cout << "opening: " << file << "\n";
+            cout << file << ": ";
             
             
             PSATsolver::solve(M, pi, &time, 
                              (char*) file.c_str(), false);
                              
+            if (pi[0] == 1)
+            {
+                sat += 1/n;
+                cout << "sat, time: ";
+            }
+            else cout << "unsat, time: ";
             
-            cout << j << " " << time << "\n";
+            cout << time << "\n";
             y += time/N;
         }
         output << i << " " << y << "\n";

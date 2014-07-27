@@ -89,9 +89,11 @@ int PSATsolver::solve(int**& m,
                                             n-1);
         if(sol[0] == 0)
         {
-            cout << "Unsat" << "\n";
             if(v)
+            {
+                cout << "Unsat" << "\n";
                 cout << count << " iterações\n";
+            }
             if ((end = times(&tmsend)) == -1)
                 cout << "times error" << endl;
         
