@@ -6,12 +6,12 @@ set output "data_p.ps"
 set terminal postscript portrait
 set size 1,.5
 
-set yrange  [0:5]
+set yrange  [0:0.1]
 set y2range [0:1]
 
 set ylabel 'time(s)' tc lt 1
-set ytics 1 nomirror tc lt 1
+set ytics 0.01 nomirror tc lt 1
 set y2label 'sat' tc lt 2
 set y2tics 0.1 nomirror tc lt 2
 
-plot[1:10] "data/k10n100/time_final.txt" using 1:2 with lines axes x1y1 t 'time', "data/k10n100/sat_final.txt" using 1:2 with lines axes x1y2 t 'sat proportion'
+plot[1:10] "data/time.txt" using 1:2 with lines axes x1y1 t 'time', "data/sat.txt" using 1:2 with lines axes x1y2 t 'sat proportion'
