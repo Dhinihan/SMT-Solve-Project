@@ -65,10 +65,10 @@ void test(int N,     int k,   int n,         double step,
     vector<double> pi;
     ofstream outtime;
     ofstream outsat;
-    outtime.open("./data/time.txt");
-    outsat.open("./data/sat.txt");
     for(double i = begin; i <= end; i+=step)
     {
+        outtime.open("./data/time" + to_string((int) (i*10)) + ".txt");
+        outsat.open("./data/sat" + to_string((int) (i*10)) + ".txt");
         double y = 0;
         double sat = 0;
         for(int j = 0; j < N; j++)
@@ -99,9 +99,10 @@ void test(int N,     int k,   int n,         double step,
         }
         outtime << i << " " << y << "\n";
         outsat << i << " " << sat << "\n";
+        cout << 
         cout <<"media tempo: "<< y << "\n";
         cout <<"media sat: " << sat << "\n";
+        outtime.close();
+        outsat.close();
     }
-    outtime.close();
-    outsat.close();
 }
