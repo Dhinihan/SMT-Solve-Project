@@ -6,7 +6,7 @@
 using namespace std;
 using namespace arma;
 
-void test(int N, int k, int n, double step, int begin, int end, string prefix);
+void test(int N, int k, int n, double step, double begin, double end, string prefix);
 
 int main(int argc, char** argv)
 {
@@ -41,8 +41,8 @@ int main(int argc, char** argv)
              atoi(argv[3]),
              atoi(argv[4]),
              atof(argv[5]),
-             atoi(argv[6]),
-             atoi(argv[7]),
+             atof(argv[6]),
+             atof(argv[7]),
              argv[8]);
         return 1;
     }
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 }
 
 void test(int N,     int k,   int n,         double step, 
-          int begin, int end, string prefix)
+          double begin, double end, string prefix)
 {
     int** matrix;
     int**& M = matrix;
@@ -67,8 +67,8 @@ void test(int N,     int k,   int n,         double step,
     ofstream outsat;
     for(double i = begin; i <= end; i+=step)
     {
-        outtime.open("./data/time" + to_string((int) (i*10)) + ".txt");
-        outsat.open("./data/sat" + to_string((int) (i*10)) + ".txt");
+        outtime.open("./data/time/" + to_string((int) (i*10)) + ".txt");
+        outsat.open("./data/sat/" + to_string((int) (i*10)) + ".txt");
         double y = 0;
         double sat = 0;
         for(int j = 0; j < N; j++)
@@ -98,8 +98,7 @@ void test(int N,     int k,   int n,         double step,
             y += time/N;
         }
         outtime << i << " " << y << "\n";
-        outsat << i << " " << sat << "\n";
-        cout << 
+        outsat << i << " " << sat << "\n"; 
         cout <<"media tempo: "<< y << "\n";
         cout <<"media sat: " << sat << "\n";
         outtime.close();
