@@ -212,16 +212,19 @@ void PSATsolver::pivoting(mat& B,
     int minIndex = -1;
 
     mat Xj = B.i()*Aj;
-    
+
     for(int i = 0; i < Xj.n_rows; i++)
     {
-	if(Xj(i,0) > delta && pi(i,0)/Xj(i,0) < min + delta)
+	if(Xj(i,0) > delta && pi(i,0)/Xj(i,0) < min - delta)
         {
+	
             min = pi(i,0)/Xj(i,0);
             minIndex = i;
+	    if (min < delta)
+		break;
+	    
         }
     }
-    
     B.insert_cols(minIndex, Aj);
     B.shed_col(minIndex+1);
     

@@ -101,7 +101,7 @@ class CVC4Solver
                                  bool v = false);
         double static getDelta(){return 1.0/delta;};
                                  
-        static const int delta = 1000000;
+        static const int delta = 10000000;
 };
 
 #endif
