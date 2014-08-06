@@ -68,6 +68,8 @@ class PSATsolver
         
         static int findSolutions(vector<mat>& matrix, mat coeffs);
         
+        static mat PSATsolver::supTriangle(int n)
+        
     public:
         
         static int solve(int**& m, 

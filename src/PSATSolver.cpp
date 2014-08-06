@@ -58,10 +58,10 @@ int PSATsolver::solve(int**& m,
     int n = cleaned.size();
     
     mat c = ones<mat>(n,1);
-    mat B = eye<mat>(n,n);
+    mat B = supTriangle(n);
     mat p = vectorToMat(cleaned);
 
-    mat pi = p;
+    mat pi = B.i()*p;
     mat z = c.t()*pi;
     
     if(v)
@@ -169,6 +169,16 @@ int PSATsolver::solve(int**& m,
     return n;        
 }
 
+mat PSATsolver::supTriangle(int n)
+{
+    mat matrix = ones<mat>(n,n);
+    for(int i = 1; i > -n; i--)
+        matrix.diag(i) -= 1;
+        
+    return matrix;
+    
+}
+
 vector<double> PSATsolver::matToVector(mat A)
 {
     double iDelta = 1/CVC4Solver::getDelta();
@@ -260,10 +270,13 @@ void PSATsolver::pivoting(mat& B,
 int PSATsolver::findSolutions(vector<mat>& matrix, mat coeffs)
 {
     double delta = CVC4Solver::getDelta();
+    
+    
+
 
     for(int i = 0; i < matrix.size(); i++)
     {
-        mat check = coeffs*matrix[i];
+        mat check = coeffs.i()*matrix[i];
         if(check(0,0) > delta)
             return i;
     }
