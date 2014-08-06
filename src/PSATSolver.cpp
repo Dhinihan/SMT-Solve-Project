@@ -169,14 +169,13 @@ int PSATsolver::solve(int**& m,
     return n;        
 }
 
-mat PSATsolver::supTriangle(int n)
+mat PSATsolver::supTriangle(int n, vector<double> probs)
 {
     mat matrix = ones<mat>(n,n);
     for(int i = 1; i > -n; i--)
         matrix.diag(i) -= 1;
         
     return matrix;
-    
 }
 
 vector<double> PSATsolver::matToVector(mat A)
