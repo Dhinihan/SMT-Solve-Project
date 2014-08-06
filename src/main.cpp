@@ -16,6 +16,7 @@ int main(int argc, char** argv)
     else
         v = false;
     
+
     if (argc < 2)
     {
         std::cout << "I need a input file " << "\n";
