@@ -86,11 +86,10 @@ int PSATsolver::solve(int**& m,
         
         if(v)
             cout << z << "\n";
-            
+
         solIndex = findSolutions(partialSolutions, coeffs);
-                   
         if(solIndex > -1)
-            mat sol = partialSolutions[solIndex];
+            sol = partialSolutions[solIndex];
         else
         {
             
@@ -121,6 +120,7 @@ int PSATsolver::solve(int**& m,
             partialSolutions.push_back(sol);
         }
         
+
         mat teste = (c.t()*B.i())*sol;
         if (teste(0,0) < min)
             min = teste(0,0);
@@ -260,13 +260,12 @@ void PSATsolver::pivoting(mat& B,
 int PSATsolver::findSolutions(vector<mat>& matrix, mat coeffs)
 {
     double delta = CVC4Solver::getDelta();
-
+    
     for(int i = 0; i < matrix.size(); i++)
     {
-        mat check = coeffs*matrix[i];
-        if(check(0,0) > delta)
+        mat check = coeffs.t()*matrix[i];
+        if(check(0,0) > delta*matrix[i].n_rows)
             return i;
     }
-    
     return -1;
 }
