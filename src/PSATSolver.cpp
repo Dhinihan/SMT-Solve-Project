@@ -76,37 +76,52 @@ int PSATsolver::solve(int**& m,
     int count = 0;
     double min = 1;
     
+    vector<mat> partialSolutions;
+    
     while(z(0,0) > delta)
     {
         vector<double> coeffs = matToVector(c.t()*B.i());
+        int solIndex;
+        mat sol;
         
         if(v)
             cout << z << "\n";
             
-        vector<int> sol = CVC4Solver::solve(coeffs, 
-                                            extra, 
-                                            clauses,
-                                            n-1);
-        if(sol[0] == 0)
+        solIndex = findSolutions(partialSolutions, coeffs);
+                   
+        if(solIndex > -1)
+            mat sol = partialSolutions(solIndex);
+        else
         {
-            if(v)
+            
+            vector<int> newSolution = CVC4Solver::solve(coeffs, 
+                                                        extra, 
+                                                        clauses,
+                                                        n-1);
+            if(newSolution[0] == 0)
             {
-                cout << "Unsat" << "\n";
-                cout << count << " iterações\n";
-            }
-            if ((end = times(&tmsend)) == -1)
-                cout << "times error" << endl;
-            
-            prob.clear();
-            prob.push_back(0);
-            
-            *time = ((tmsend.tms_utime - tmsstart.tms_utime) / 
-                    (double) clktck);   
+                if(v)
+                {
+                    cout << "Unsat" << "\n";
+                    cout << count << " iterations\n";
+                }
+                if ((end = times(&tmsend)) == -1)
+                    cout << "times error" << endl;
+                
+                prob.clear();
+                prob.push_back(0);
+                
+                *time = ((tmsend.tms_utime - tmsstart.tms_utime) / 
+                        (double) clktck);   
 
-            return n;
+                return n;
+            }
+            
+            sol = vectorToMat(newSolution);
+            partialSolutions.push_back(sol);
         }
         
-        mat teste = (c.t()*B.i())*vectorToMat(sol);
+        mat teste = (c.t()*B.i())*sol;
         if (teste(0,0) < min)
             min = teste(0,0);
         if(v)
@@ -240,4 +255,17 @@ void PSATsolver::pivoting(mat& B,
     }
 
     pi = B.i()*p;
+}
+
+int PSATsolver::findSolutions(vector<mat>& matrix, mat coeffs)
+{
+    double delta = CVC4Solver::getDelta();
+
+    for(int i = 0; i < matrix.size(); i++)
+    {
+        if(coeffs*matrix[i] > delta)
+            return i;
+    }
+    
+    return -1;
 }

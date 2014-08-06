@@ -66,6 +66,8 @@ class PSATsolver
                              
         static int** makeMatrix(int n);
         
+        static int findSolutions(vector<mat>& matrix, mat coeffs);
+        
     public:
         
         static int solve(int**& m, 
