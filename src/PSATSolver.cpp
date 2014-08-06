@@ -90,7 +90,7 @@ int PSATsolver::solve(int**& m,
         solIndex = findSolutions(partialSolutions, coeffs);
                    
         if(solIndex > -1)
-            mat sol = partialSolutions(solIndex);
+            mat sol = partialSolutions[solIndex];
         else
         {
             
@@ -127,7 +127,7 @@ int PSATsolver::solve(int**& m,
         if(v)
             cout << "min: " << min << "\n";
         
-        pivoting(B, pi, c, vectorToMat(sol), p, v);
+        pivoting(B, pi, c, sol, p, v);
         z = c.t()*pi;
         
         count++;
@@ -263,7 +263,8 @@ int PSATsolver::findSolutions(vector<mat>& matrix, mat coeffs)
 
     for(int i = 0; i < matrix.size(); i++)
     {
-        if(coeffs*matrix[i] > delta)
+        mat check = coeffs*matrix[i];
+        if(check(0,0) > delta)
             return i;
     }
     
