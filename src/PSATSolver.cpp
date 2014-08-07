@@ -175,7 +175,7 @@ mat PSATsolver::supTriangle(int n, vector<double>& probs)
     vector<double*> probsWithIndex;
     for(int i = 0; i < probs.size(); i++)
     {
-        double temp[2];
+        double* temp = malloc((sizeof (double))*2);
         temp[0] = probs[i];
         temp[1] = (double) i;
         
