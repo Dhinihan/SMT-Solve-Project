@@ -68,14 +68,16 @@ class PSATsolver
         
         static int findSolutions(vector<mat>& matrix, mat coeffs);
         
-        static mat supTriangle(int n);
+        static mat supTriangle(int n, vector<double>& probs);
+        
+        static bool lessProbs(double* a, double* b);
         
     public:
         
         static int solve(int**& m, 
                          vector<double>& prob, 
                          double* time,
-                         char* inputPath, 
+                          char* inputPath, 
                          bool v);
         
         //! 

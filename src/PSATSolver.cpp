@@ -58,7 +58,7 @@ int PSATsolver::solve(int**& m,
     int n = cleaned.size();
     
     mat c = ones<mat>(n,1);
-    mat B = supTriangle(n);
+    mat B = supTriangle(n, cleaned);
     mat p = vectorToMat(cleaned);
 
     mat pi = B.i()*p;
@@ -169,8 +169,26 @@ int PSATsolver::solve(int**& m,
     return n;        
 }
 
-mat PSATsolver::supTriangle(int n, vector<double> probs)
+mat PSATsolver::supTriangle(int n, vector<double>& probs)
 {
+
+    vector<double*> probsWithIndex;
+    for(int i = 0; i < probs.size(); i++)
+    {
+        double temp[2];
+        temp[0] = probs[i];
+        temp[1] = (double) i;
+        
+        probsWithIndex.push_back(temp);
+    }
+    
+    sort(probsWithIndex.begin(), probsWithIndex.end(), lessProbs);
+    
+    for(int i = 0; i < probs.size(); i++)
+    {
+        cout << probsWithIndex[i][0] << " " << probsWithIndex[i][1] << "\n";
+    }
+    
     mat matrix = ones<mat>(n,n);
     for(int i = 1; i > -n; i--)
         matrix.diag(i) -= 1;
@@ -277,4 +295,9 @@ int PSATsolver::findSolutions(vector<mat>& matrix, mat coeffs)
             return i;
     }
     return -1;
+}
+
+bool PSATsolver::lessProbs(double *a, double* b)
+{
+    return a[0] < b[0];
 }
