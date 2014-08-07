@@ -175,7 +175,7 @@ mat PSATsolver::supTriangle(int n, vector<double>& probs)
     vector<double*> probsWithIndex;
     for(int i = 0; i < probs.size(); i++)
     {
-        double* temp = malloc((sizeof (double))*2);
+        double* temp = (double*) malloc((sizeof (double))*2);
         temp[0] = probs[i];
         temp[1] = (double) i;
         
@@ -184,15 +184,16 @@ mat PSATsolver::supTriangle(int n, vector<double>& probs)
     
     sort(probsWithIndex.begin(), probsWithIndex.end(), lessProbs);
     
-    for(int i = 0; i < probs.size(); i++)
-    {
-        cout << probsWithIndex[i][0] << " " << probsWithIndex[i][1] << "\n";
-    }
-    
     mat matrix = ones<mat>(n,n);
-    for(int i = 1; i > -n; i--)
-        matrix.diag(i) -= 1;
-        
+    for(int i = 0; i < probs.size(); i++)
+        for(int j = 0; j < probs.size() - i - 1; j++)
+	{
+	    int row = rint(probsWithIndex[i][1]);
+	    matrix(row, j) = 0;
+	    cout << i << " " << j << " ae!\n";
+	}
+
+	cout << "passou\n";
     return matrix;
 }
 
