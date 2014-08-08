@@ -57,8 +57,8 @@ int PSATsolver::solve(int**& m,
     
     int n = cleaned.size();
     
-    mat c = ones<mat>(n,1);
     mat B = supTriangle(n, cleaned);
+    mat c = makeCostVector(B, extra, clauses, n);
     mat p = vectorToMat(cleaned);
 
     mat pi = B.i()*p;
@@ -196,6 +196,22 @@ mat PSATsolver::supTriangle(int n, vector<double>& probs)
 	cout << "passou\n";
     return matrix;
 }
+
+mat PSATsolver::makeCostVector(int                  n
+                               mat                  B, 
+                               vector<int>&         free, 
+                               vector<vector<int>>& clauses)
+{
+    mat c = ones<n,1>;
+    for(int i = 0; i < b.n_cols; i++)
+    {
+        cout << B(i);
+    }
+    cout << B;
+    exit(-1);
+    return c;
+}                               
+                               
 
 vector<double> PSATsolver::matToVector(mat A)
 {
