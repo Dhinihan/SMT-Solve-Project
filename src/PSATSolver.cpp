@@ -190,10 +190,7 @@ mat PSATsolver::supTriangle(int n, vector<double>& probs)
 	{
 	    int row = rint(probsWithIndex[i][1]);
 	    matrix(row, j) = 0;
-	    cout << i << " " << j << " ae!\n";
 	}
-
-	cout << "passou\n";
     return matrix;
 }
 
@@ -205,7 +202,7 @@ mat PSATsolver::makeCostVector(int                  n,
     mat c = ones<mat>(n,1);
     for(int i = 0; i < B.n_cols; i++)
     {
-        cout << B(i);
+        vector<int> col = matToVector(B.col(i));
     }
     cout << B;
     exit(-1);
