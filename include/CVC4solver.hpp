@@ -60,6 +60,11 @@ class CVC4Solver
                                 vector<vector<int>>& clauses,
                                 ExprManager*         em);
         
+        static Expr assertColumn(vector<Expr>& X, 
+                                 vector<int>&  col,
+                                 vector<int>&  free,
+                                 ExprManager*  em);
+        
         //! Creates a expression with the desired inequation.
         /*! The inequation is in the form of A0 + Ai*Xi >= 0. where i
          *  goes from 1 to n*w
@@ -99,6 +104,12 @@ class CVC4Solver
                                  vector<vector<int>>& clauses,
                                  int n,
                                  bool v = false);
+                                 
+        static bool isSat(vector<int>&         col,
+                          vector<int>&         free,
+                          vector<vector<int>>& clauses,
+                          bool                 v = true);
+        
         double static getDelta(){return 1.0/delta;};
                                  
         static const int delta = 10000000;

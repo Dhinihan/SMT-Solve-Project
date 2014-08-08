@@ -83,6 +83,37 @@ vector<int> CVC4Solver::solve(vector<double>& coef,
     
 }
 
+bool CVC4Solver::isSat(vector<int>&         col,
+                       vector<int>&         free,
+                       vector<vector<int>>& clauses,
+                       bool                 v)
+{
+    ExprManager em;
+    SmtEngine smt(&em);
+    
+    smt.setOption("incremental", SExpr("true"));
+    smt.setOption("produce-models", SExpr("true"));
+    GetModelCommand cExample = GetModelCommand();
+    
+    vector<Expr> X = Xvector(n, free, &em);
+    
+    Expr X_EQ_1_OR_0 = XDomain(X, &em);
+    
+    Expr restrictions = makeClauses(X, clauses, &em); 
+    
+    smt.assertFormula(em.mkExpr(Kind::AND, X_EQ_1_OR_0, restrictions));
+    
+    Expr column_assertions = assertColumn(X ,col, free);
+    
+    smt.push();
+    
+    string isSat = smt.checkSat(inequation).toString();
+    
+    smt.pop();
+    
+    return !isSat.compare("unsat");
+}
+
 vector<Expr> CVC4Solver::Xvector(int n, 
                                  vector<int>& free, 
                                  ExprManager* em)
@@ -167,6 +198,36 @@ Expr CVC4Solver::makeClauses(vector<Expr>&        X,
     
     return em->mkExpr(Kind::AND, assertions);
 }                  
+
+Expr CVC4Solver::assertColumn(vector<Expr>& X, 
+                              vector<int>& col,
+                              vector<int>& free,
+                              ExprManager* em)
+{
+    vector<Expr> colsAssertions;
+    
+    Expr one  = em->mkConst(Rational(1));
+    Expr zero = em->mkConst(Rational(0));
+    
+    for(int i = 0, j = 0; i < X.size(); i++)
+    {
+        if(free.size() > 0 && i == free[j])
+            j++;
+        else
+        {
+            if(col[i] == 1)
+                colsAssertions.push_back(em->mkExpr(Kind::EQUAL, 
+                                                    X[i], 
+                                                    one));
+            else
+                colsAssertions.push_back(em->mkExpr(Kind::EQUAL, 
+                                                    X[i], 
+                                                    zero));
+        }
+    }
+    
+    return em->mkExpr(Kind::AND, colsAssertions);
+}
 
 Expr CVC4Solver::inequation(vector<Expr>& X, 
                             vector<Expr>& A,
