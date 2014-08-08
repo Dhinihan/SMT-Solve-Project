@@ -70,7 +70,7 @@ class PSATsolver
         
         static mat supTriangle(int n, vector<double>& probs);
         
-        static mat makeCostVector(int                  n
+        static mat makeCostVector(int                  n,
                                   mat                  B, 
                                   vector<int>&         free, 
                                   vector<vector<int>>& clauses);
