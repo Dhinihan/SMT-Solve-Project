@@ -30,6 +30,10 @@ class PSATsolver
          * \sa       solve()
          */
         static vector<double> matToVector(mat A);
+
+        static vector<int> matToVectorInt(mat A);
+
+
         
         //! Transforms an integer vector to a one dimensional matrix.
         /*!

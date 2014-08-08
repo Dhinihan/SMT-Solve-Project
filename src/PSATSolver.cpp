@@ -56,9 +56,11 @@ int PSATsolver::solve(int**& m,
             cleaned.push_back(prob[i]);
     
     int n = cleaned.size();
+
+    vector<mat> partialSolutions;
     
     mat B = supTriangle(n, cleaned);
-    mat c = makeCostVector(n, B, extra, clauses);
+    mat c = makeCostVector(n, B, extra, clauses, partialSolutions);
     mat p = vectorToMat(cleaned);
 
     mat pi = B.i()*p;
@@ -76,7 +78,6 @@ int PSATsolver::solve(int**& m,
     int count = 0;
     double min = 1;
     
-    vector<mat> partialSolutions;
     
     while(z(0,0) > delta)
     {
@@ -195,17 +196,23 @@ mat PSATsolver::supTriangle(int n, vector<double>& probs)
 }
 
 mat PSATsolver::makeCostVector(int                  n,
-                               mat                  B, 
-                               vector<int>&         free, 
-                               vector<vector<int>>& clauses)
+                               mat                  B,
+                               vector<int>&         free,
+                               vector<vector<int>>& clauses,
+			       vector<mat>&         partialSolutions)
 {
     mat c = ones<mat>(n,1);
     for(int i = 0; i < B.n_cols; i++)
     {
-        vector<int> col = matToVector(B.col(i));
-        bool sat = CVC4solver::isSat(col, free, clauses, n);
+        vector<int> col = matToVectorInt(B.col(i));
+	for(int j = 0; j < n; j++)
+	    cout << col[j] << "\n";
+        bool sat = CVC4Solver::isSat(col, free, clauses, n-1);
         if(sat)
+	{
             c(i,0) = 0.0;
+	    partialSolutions.push_back(B.col(i));
+	}
     }
     cout << c;
     exit(-1);
@@ -230,11 +237,11 @@ vector<double> PSATsolver::matToVector(mat A)
     return v;
 }
 
-vector<int> PSATsolver::matToVector(mat A)
+vector<int> PSATsolver::matToVectorInt(mat A)
 {
     double iDelta = 1/CVC4Solver::getDelta();
     vector<int> v;
-    for(int i = 0; i < A.n_cols; i++)
+    for(int i = 0; i < A.n_rows; i++)
         v.push_back(rint(A(i,0)));
     return v;
 }

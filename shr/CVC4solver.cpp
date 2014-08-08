@@ -105,6 +105,9 @@ bool CVC4Solver::isSat(vector<int>&         col,
     smt.assertFormula(em.mkExpr(Kind::AND, X_EQ_1_OR_0, restrictions));
     
     Expr column_assertions = assertColumn(X ,col, free, &em);
+
+    if(v)
+    	cout << column_assertions << "\n";
     
     smt.push();
     
@@ -112,7 +115,10 @@ bool CVC4Solver::isSat(vector<int>&         col,
     
     smt.pop();
     
-    return !isSat.compare("unsat");
+    if(v)
+        cout << isSat << "\n";
+
+    return isSat.compare("unsat");
 }
 
 vector<Expr> CVC4Solver::Xvector(int n, 
