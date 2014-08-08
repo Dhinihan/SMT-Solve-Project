@@ -199,20 +199,20 @@ mat PSATsolver::makeCostVector(int                  n,
                                mat                  B,
                                vector<int>&         free,
                                vector<vector<int>>& clauses,
-			       vector<mat>&         partialSolutions)
+			                   vector<mat>&         partialSolutions)
 {
     mat c = ones<mat>(n,1);
     for(int i = 0; i < B.n_cols; i++)
     {
         vector<int> col = matToVectorInt(B.col(i));
-	for(int j = 0; j < n; j++)
-	    cout << col[j] << "\n";
+	    for(int j = 0; j < n; j++)
+	        cout << col[j] << "\n";
         bool sat = CVC4Solver::isSat(col, free, clauses, n-1);
         if(sat)
-	{
+	    {
             c(i,0) = 0.0;
-	    partialSolutions.push_back(B.col(i));
-	}
+	        partialSolutions.push_back(B.col(i));
+	    }
     }
     cout << c;
     exit(-1);
