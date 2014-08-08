@@ -203,8 +203,11 @@ mat PSATsolver::makeCostVector(int                  n,
     for(int i = 0; i < B.n_cols; i++)
     {
         vector<int> col = matToVector(B.col(i));
+        bool sat = CVC4solver::isSat(col, free, clauses, n);
+        if(sat)
+            c(i,0) = 0.0;
     }
-    cout << B;
+    cout << c;
     exit(-1);
     return c;
 }                               
@@ -226,6 +229,16 @@ vector<double> PSATsolver::matToVector(mat A)
     }
     return v;
 }
+
+vector<int> PSATsolver::matToVector(mat A)
+{
+    double iDelta = 1/CVC4Solver::getDelta();
+    vector<int> v;
+    for(int i = 0; i < A.n_cols; i++)
+        v.push_back(rint(A(i,0)));
+    return v;
+}
+
 
 mat PSATsolver::vectorToMat(vector<int>& v)
 {
