@@ -86,6 +86,7 @@ vector<int> CVC4Solver::solve(vector<double>& coef,
 bool CVC4Solver::isSat(vector<int>&         col,
                        vector<int>&         free,
                        vector<vector<int>>& clauses,
+                       int                  n,
                        bool                 v)
 {
     ExprManager em;
@@ -103,11 +104,11 @@ bool CVC4Solver::isSat(vector<int>&         col,
     
     smt.assertFormula(em.mkExpr(Kind::AND, X_EQ_1_OR_0, restrictions));
     
-    Expr column_assertions = assertColumn(X ,col, free);
+    Expr column_assertions = assertColumn(X ,col, free, &em);
     
     smt.push();
     
-    string isSat = smt.checkSat(inequation).toString();
+    string isSat = smt.checkSat(column_assertions).toString();
     
     smt.pop();
     

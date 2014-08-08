@@ -108,6 +108,7 @@ class CVC4Solver
         static bool isSat(vector<int>&         col,
                           vector<int>&         free,
                           vector<vector<int>>& clauses,
+                          int                  n,
                           bool                 v = true);
         
         double static getDelta(){return 1.0/delta;};
