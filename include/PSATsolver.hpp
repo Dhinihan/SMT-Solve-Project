@@ -77,7 +77,7 @@ class PSATsolver
         static mat makeCostVector(int                  n,
                                   mat                  B, 
                                   vector<int>&         free, 
-                                  vector<vector<int>>& clauses
+                                  vector<vector<int>>& clauses,
                                   vector<mat>& partialSolutions);
         
         static bool lessProbs(double* a, double* b);

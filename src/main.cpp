@@ -97,7 +97,6 @@ void test(int N,     int k,   int n,         double step,
             
             cout << time << "\n";
             y += time/N;
-	    cin.ignore();
 
         }
         outtime << i << " " << y << "\n";
