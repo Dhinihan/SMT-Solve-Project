@@ -78,9 +78,11 @@ int PSATsolver::solve(int**& m,
     int count = 0;
     double min = 1;
     
-    
     while(z(0,0) > delta)
     {
+        if(PSATsolver::debug)
+            cout << "z = " << z(0,0) << "\n";
+
         vector<double> coeffs = matToVector(c.t()*B.i());
         int solIndex;
         mat sol;
@@ -93,7 +95,7 @@ int PSATsolver::solve(int**& m,
             sol = partialSolutions[solIndex];
         else
         {
-            
+        
             vector<int> newSolution = CVC4Solver::solve(coeffs, 
                                                         extra, 
                                                         clauses,
@@ -285,26 +287,57 @@ void PSATsolver::pivoting(mat& B,
     int minIndex = -1;
 
     mat Xj = B.i()*Aj;
+    
+    if(PSATsolver::debug)
+    {
+        cout << "Xj "; 
+        for(int i = 0; i < Xj.n_rows; i++)
+            cout << Xj(i, 0) << ", ";
+        cout << "\n";
+    }
 
     for(int i = 0; i < Xj.n_rows; i++)
     {
-	if(Xj(i,0) > delta && pi(i,0)/Xj(i,0) < min - delta)
+	    if(Xj(i,0) > delta && pi(i,0)/Xj(i,0) < min - delta)
         {
-	
+            
+            if(PSATsolver::debug)
+                cout << pi(i,0)/Xj(i,0) << " < " 
+                     << min - delta << "\n";
+            
             min = pi(i,0)/Xj(i,0);
+            
             minIndex = i;
-	    if (min < delta)
-		break;
-	    
+	        if (min < delta)
+		        break;
         }
+        else if (PSATsolver::debug && Xj(i,0) > delta)
+            cout << pi(i,0)/Xj(i,0) << " >= " << min - delta << "\n";
+        else if (PSATsolver::debug)
+            cout << Xj(i,0) << " < " << delta << "\n";
+        
+            
     }
+
     B.insert_cols(minIndex, Aj);
     B.shed_col(minIndex+1);
     
     c(minIndex,0) = 0;
     
+    if(PSATsolver::debug)
+    {
+        cout << "min = " << min << "\n";
+        cout << "c "; 
+        for(int i = 0; i < c.n_rows; i++)
+            cout << c(i, 0) << ", ";
+        cout << "\n";
+    }
+    
     if(v)
         cout << "B:\n" << B << "\n";
+    
+    if(PSATsolver::debug)
+        cin.ignore();
     
     if(arma::rank(B) < B.n_cols)
     {
@@ -313,22 +346,41 @@ void PSATsolver::pivoting(mat& B,
     }
 
     pi = B.i()*p;
+    
+    if(PSATsolver::debug)
+    {
+        cout << "pi "; 
+        for(int i = 0; i < pi.n_rows; i++)
+            cout << pi(i, 0) << ", ";
+        cout << "\n";
+    }
 }
 
 int PSATsolver::findSolutions(vector<mat>& matrix, mat coeffs)
 {
     double delta = CVC4Solver::getDelta();
     
-    for(int i = 0; i < matrix.size(); i++)
+    for(int i = matrix.size()-1; i >= 0 ; i--)
     {
         mat check = coeffs.t()*matrix[i];
-        if(check(0,0) > delta*matrix[i].n_rows)
+        if(check(0,0) > delta*12)
+        {
+            if(PSATsolver::debug)
+                cout << "Entrou a linha " << i << ": " << check;
             return i;
+        }
+        else if(check(0,0) > -delta*matrix[i].n_rows)
+        {
+            if(PSATsolver::debug)
+                cout << "Não entrou a linha " << i << ": " << check;
+        }
     }
     return -1;
 }
 
 bool PSATsolver::lessProbs(double *a, double* b)
 {
+    if(PSATsolver::debug)
+        cout << a[0] << " < " << b[0] << " : " << (a[0] < b[0]) << "\n";
     return a[0] < b[0];
 }

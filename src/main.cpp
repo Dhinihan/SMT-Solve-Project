@@ -1,4 +1,5 @@
 #include <time.h>
+#include <math.h>
 
 #include "../include/PSATsolver.hpp"
 #include "../include/TestGenerator.hpp"
@@ -68,8 +69,10 @@ void test(int N,     int k,   int n,         double step,
     ofstream outsat;
     for(double i = begin; i <= end; i+=step)
     {
-        outtime.open("./data/time/" + to_string((int) (i*10)) + ".txt");
-        outsat.open("./data/sat/" + to_string((int) (i*10)) + ".txt");
+	int id = rint(i*10);
+	cout << id << "\n";
+        outtime.open("./data/time/" + to_string(id) + ".txt");
+        outsat.open("./data/sat/" + to_string(id) + ".txt");
         double y = 0;
         double sat = 0;
         for(int j = 0; j < N; j++)

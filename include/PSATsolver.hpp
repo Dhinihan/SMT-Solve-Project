@@ -33,7 +33,7 @@ class PSATsolver
 
         static vector<int> matToVectorInt(mat A);
 
-
+        static const bool debug = false;
         
         //! Transforms an integer vector to a one dimensional matrix.
         /*!
