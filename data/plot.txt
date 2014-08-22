@@ -6,11 +6,11 @@ set output "data_p.ps"
 set terminal postscript portrait
 set size 1,.5
 
-set yrange  [0:0.1]
+set yrange  [0:1.2]
 set y2range [0:1]
 
 set ylabel 'time(s)' tc lt 1
-set ytics 0.01 nomirror tc lt 1
+set ytics 0.12 nomirror tc lt 1
 set y2label 'sat' tc lt 2
 set y2tics 0.1 nomirror tc lt 2
 
